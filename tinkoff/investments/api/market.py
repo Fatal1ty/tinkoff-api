@@ -72,6 +72,7 @@ class MarketCandlesAPI(BaseAPI):
                           dt_from: datetime,
                           dt_to: datetime,
                           interval: CandleResolution) -> Candles:
+
         if not dt_from.tzinfo:
             dt_from = dt_from.replace(tzinfo=timezone.utc)
         if not dt_to.tzinfo:

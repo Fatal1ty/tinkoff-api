@@ -1,14 +1,14 @@
 from dataclasses import dataclass
 from typing import Dict, Any
 
-from .base import BaseModel
+from .base import BaseModel, Status
 
 
 @dataclass
 class TinkoffInvestmentsAPIResponse(BaseModel):
     trackingId: str
-    status: str
+    status: Status
     payload: Dict[Any, Any]
 
     def is_successful(self):
-        return self.status
+        return self.status is Status.OK

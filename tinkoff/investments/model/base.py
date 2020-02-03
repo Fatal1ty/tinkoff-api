@@ -11,12 +11,13 @@ class BaseModel(DataClassJSONMixin):
 
 @dataclass
 class Error(BaseModel):
-    message: Optional[str]
-    code: Optional[str]
+    message: Optional[str] = None
+    code: Optional[str] = None
 
 
 class Status(Enum):
     OK = 'Ok'
+    ERROR = 'Error'
 
 
 class Currency(Enum):

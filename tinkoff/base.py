@@ -7,7 +7,14 @@ from yarl import URL
 class BaseClient:
     def __init__(self, base_url: URL, headers: Optional[Dict[str, str]] = None):
         self._base_url = base_url
-        self._session = aiohttp.ClientSession(headers=headers)
+        self.__headers = headers
+        self.__session = None  # type: aiohttp.ClientSession
+
+    @property
+    def _session(self):
+        if not self.__session:
+            self.__session = aiohttp.ClientSession(headers=self.__headers)
+        return self.__session
 
     async def _request(self, method, path, **kwargs):
         # type: (str, str, Any) -> Dict[Any, Any]

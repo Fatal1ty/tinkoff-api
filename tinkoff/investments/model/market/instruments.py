@@ -17,3 +17,10 @@ class MarketInstrument(BaseModel):
     currency: Optional[Currency] = None
     isin: Optional[str] = None
     minPriceIncrement: float = None
+
+
+__all__ = [
+    'FigiName',
+    'TickerName',
+    'MarketInstrument',
+]

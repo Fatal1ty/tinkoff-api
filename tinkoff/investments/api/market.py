@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from typing import Optional, List, Any
 
 from tinkoff.investments.api.base import BaseAPI
@@ -6,6 +7,7 @@ from tinkoff.investments.api.base import BaseAPI
 from tinkoff.investments.client.exceptions import (
     UsageError,
 )
+from tinkoff.investments.model.market.candles import Candles, CandleResolution
 from tinkoff.investments.model.market.instruments import (
     FigiName,
     TickerName,
@@ -26,9 +28,6 @@ from tinkoff.investments.model.market.instruments import (
 
 
 class MarketInstrumentsAPI(BaseAPI):
-    def __init__(self, *args, **kwargs):
-        super(MarketInstrumentsAPI, self).__init__(*args, **kwargs)
-
     async def search(self, figi=None, ticker=None):
         # type: (Optional[FigiName], Optional[TickerName]) -> Any
         if figi:
@@ -67,7 +66,31 @@ class MarketInstrumentsAPI(BaseAPI):
                 for obj in payload['instruments']]
 
 
+class MarketCandlesAPI(BaseAPI):
+    async def get_candles(self,
+                          figi: FigiName,
+                          dt_from: datetime,
+                          dt_to: datetime,
+                          interval: CandleResolution) -> Candles:
+        if not dt_from.tzinfo:
+            dt_from = dt_from.replace(tzinfo=timezone.utc)
+        if not dt_to.tzinfo:
+            dt_to = dt_to.replace(tzinfo=timezone.utc)
+        payload = await self._request(
+            method='GET',
+            path='/market/candles',
+            params={
+                'figi': figi,
+                'from': dt_from.isoformat(),
+                'to': dt_to.isoformat(),
+                'interval': interval.value,
+            },
+        )
+        return Candles.from_dict(payload)
+
+
 class MarketAPI(BaseAPI):
     def __init__(self, *args, **kwargs):
         super(MarketAPI, self).__init__(*args, **kwargs)
         self.instruments = MarketInstrumentsAPI(self._client)
+        self.candles = MarketCandlesAPI(self._client)

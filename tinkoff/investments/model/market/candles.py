@@ -39,3 +39,10 @@ class Candles(BaseModel):
     figi: FigiName
     interval: CandleResolution
     candles: List[Candle]
+
+
+__all__ = [
+    'CandleResolution',
+    'Candle',
+    'Candles',
+]

@@ -34,3 +34,9 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
         except ClientResponseError as e:
             if e.status == 401:
                 raise TinkoffInvestmentsUnauthorizedError
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        await self.close()

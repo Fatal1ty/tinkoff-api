@@ -1,6 +1,6 @@
 # tinkoff-api
 
-> Python asyncio Tinkoff API client for humans.
+> Python Tinkoff API client for asyncio and humans.
 
 [![Latest Version](https://img.shields.io/pypi/v/tinkoff-api.svg)](https://pypi.python.org/pypi/tinkoff-api)
 [![Python Version](https://img.shields.io/pypi/pyversions/tinkoff-api.svg)](https://pypi.python.org/pypi/tinkoff-api)

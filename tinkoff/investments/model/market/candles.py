@@ -1,9 +1,8 @@
 from dataclasses import dataclass
 from typing import List
 from enum import Enum
-from datetime import datetime
 
-from tinkoff.investments.model.base import BaseModel
+from tinkoff.investments.model.base import BaseModel, ISODateTime
 from tinkoff.investments.model.market.instruments import FigiName
 
 
@@ -31,7 +30,7 @@ class Candle(BaseModel):
     h: float
     l: float
     v: int
-    time: datetime
+    time: ISODateTime
 
 
 @dataclass

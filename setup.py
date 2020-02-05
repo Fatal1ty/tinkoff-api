@@ -27,5 +27,6 @@ setup(
     python_requires=">=3.6",
     install_requires=[
         "mashumaro==1.12",
+        "ciso8601==2.1.2",
     ]
 )

@@ -7,6 +7,7 @@ from tinkoff.investments.api.base import BaseAPI
 from tinkoff.investments.client.exceptions import (
     UsageError,
 )
+from tinkoff.investments.model.market.orderbook import OrderBook
 from tinkoff.investments.model.market.candles import Candles, CandleResolution
 from tinkoff.investments.model.market.instruments import (
     FigiName,
@@ -66,13 +67,22 @@ class MarketInstrumentsAPI(BaseAPI):
                 for obj in payload['instruments']]
 
 
-class MarketCandlesAPI(BaseAPI):
-    async def get_candles(self,
-                          figi: FigiName,
-                          dt_from: datetime,
-                          dt_to: datetime,
-                          interval: CandleResolution) -> Candles:
+class MarketOrderBooksAPI(BaseAPI):
+    async def get(self, figi: FigiName, depth: int) -> OrderBook:
+        payload = await self._request(
+            method='GET',
+            path='/market/orderbook',
+            params={
+                'figi': figi,
+                'depth': depth,
+            }
+        )
+        return OrderBook.from_dict(payload)
 
+
+class MarketCandlesAPI(BaseAPI):
+    async def get(self, figi, dt_from, dt_to, interval):
+        # type: (FigiName, datetime, datetime, CandleResolution) -> Candles
         if not dt_from.tzinfo:
             dt_from = dt_from.replace(tzinfo=timezone.utc)
         if not dt_to.tzinfo:
@@ -94,4 +104,5 @@ class MarketAPI(BaseAPI):
     def __init__(self, *args, **kwargs):
         super(MarketAPI, self).__init__(*args, **kwargs)
         self.instruments = MarketInstrumentsAPI(self._client)
+        self.orderbooks = MarketOrderBooksAPI(self._client)
         self.candles = MarketCandlesAPI(self._client)

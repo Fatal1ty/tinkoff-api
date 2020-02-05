@@ -21,7 +21,7 @@ class TinkoffInvestmentsAPIError(TinkoffInvestmentsError):
         self.error = error
 
     def __str__(self):
-        return self.error.code or ''
+        return f'{self.error.code}, {self.error.message}'
 
 
 __all__ = [

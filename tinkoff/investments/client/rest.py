@@ -23,17 +23,16 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
 
     async def _request(self, method, path, **kwargs):
         # type: (str, str, Any) -> Dict[Any, Any]
-        try:
-            response = await self._session.request(
-                method=method,
-                url=self._base_url / path.lstrip('/'),
-                raise_for_status=True,
-                **kwargs
-            )
+        response = await self._session.request(
+            method=method,
+            url=self._base_url / path.lstrip('/'),
+            **kwargs
+        )
+        if response.status == 401:
+            raise TinkoffInvestmentsUnauthorizedError
+        else:
+            # TODO: ловить другие исключения, если в ответе не json
             return await response.json()
-        except ClientResponseError as e:
-            if e.status == 401:
-                raise TinkoffInvestmentsUnauthorizedError
 
     async def __aenter__(self):
         return self

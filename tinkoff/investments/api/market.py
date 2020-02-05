@@ -1,12 +1,10 @@
 from datetime import datetime, timezone
 from typing import Optional, List, Any
 
-from tinkoff.investments.api.base import BaseAPI
+from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
 
 
-from tinkoff.investments.client.exceptions import (
-    UsageError,
-)
+from tinkoff.investments.client.exceptions import TinkoffInvestmentsUsageError
 from tinkoff.investments.model.market.orderbook import OrderBook
 from tinkoff.investments.model.market.candles import Candles, CandleResolution
 from tinkoff.investments.model.market.instruments import (
@@ -28,7 +26,7 @@ from tinkoff.investments.model.market.instruments import (
 #                 for obj in payload['instruments']]
 
 
-class MarketInstrumentsAPI(BaseAPI):
+class MarketInstrumentsAPI(BaseTinkoffInvestmentsAPI):
     async def search(self, figi=None, ticker=None):
         # type: (Optional[FigiName], Optional[TickerName]) -> Any
         if figi:
@@ -38,7 +36,7 @@ class MarketInstrumentsAPI(BaseAPI):
             search_method = 'by-ticker'
             params = {'ticker': ticker}
         else:
-            raise UsageError('Expected either figi or ticker')
+            raise TinkoffInvestmentsUsageError('Expected either figi or ticker')
         return await self.__get_instruments(
             path=f'/market/search/{search_method}',
             **params
@@ -67,7 +65,7 @@ class MarketInstrumentsAPI(BaseAPI):
                 for obj in payload['instruments']]
 
 
-class MarketOrderBooksAPI(BaseAPI):
+class MarketOrderBooksAPI(BaseTinkoffInvestmentsAPI):
     async def get(self, figi: FigiName, depth: int) -> OrderBook:
         payload = await self._request(
             method='GET',
@@ -80,7 +78,7 @@ class MarketOrderBooksAPI(BaseAPI):
         return OrderBook.from_dict(payload)
 
 
-class MarketCandlesAPI(BaseAPI):
+class MarketCandlesAPI(BaseTinkoffInvestmentsAPI):
     async def get(self, figi, dt_from, dt_to, interval):
         # type: (FigiName, datetime, datetime, CandleResolution) -> Candles
         if not dt_from.tzinfo:
@@ -100,7 +98,7 @@ class MarketCandlesAPI(BaseAPI):
         return Candles.from_dict(payload)
 
 
-class MarketAPI(BaseAPI):
+class MarketAPI(BaseTinkoffInvestmentsAPI):
     def __init__(self, *args, **kwargs):
         super(MarketAPI, self).__init__(*args, **kwargs)
         self.instruments = MarketInstrumentsAPI(self._client)

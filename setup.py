@@ -26,7 +26,9 @@ setup(
     packages=find_packages(exclude=("tests",)),
     python_requires=">=3.6",
     install_requires=[
-        "mashumaro==1.12",
+        "aiohttp>=3.6.2,<3.7",
+        "yarl>=1.4.2,<1.5",
+        "mashumaro>=1.12,<2.0",
         "ciso8601==2.1.2",
     ]
 )

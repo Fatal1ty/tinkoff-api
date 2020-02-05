@@ -1,13 +1,12 @@
 from typing import Dict, Any
 
-from tinkoff.base import BaseClient
 from tinkoff.investments.model.base import Error
 from tinkoff.investments.model.response import TinkoffInvestmentsAPIResponse
 from tinkoff.investments.client.exceptions import TinkoffInvestmentsAPIError
 
 
-class BaseAPI:
-    def __init__(self, client: BaseClient):
+class BaseTinkoffInvestmentsAPI:
+    def __init__(self, client):
         self._client = client
 
     async def _request(self, method, path, **kwargs):
@@ -29,5 +28,5 @@ class BaseAPI:
 
 
 __all__ = [
-    'BaseAPI',
+    'BaseTinkoffInvestmentsAPI',
 ]

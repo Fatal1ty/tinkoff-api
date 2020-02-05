@@ -80,7 +80,7 @@ class MarketOrderBooksAPI(BaseTinkoffInvestmentsAPI):
 
 class MarketCandlesAPI(BaseTinkoffInvestmentsAPI):
     async def get(self, figi, dt_from, dt_to, interval):
-        # type: (FigiName, datetime, datetime, CandleResolution) -> Candles
+        # type: (FigiName, datetime, datetime, CandleResolution) -> List[Candle]
         if not dt_from.tzinfo:
             dt_from = dt_from.replace(tzinfo=timezone.utc)
         if not dt_to.tzinfo:

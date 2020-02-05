@@ -30,30 +30,35 @@ import asyncio
 from datetime import datetime
 
 from tinkoff.investments.client import TinkoffInvestmentsRESTClient
-from tinkoff.investments.model.market.candles import Candles, CandleResolution
+from tinkoff.investments.client.environments import Environment
+from tinkoff.investments.model.market.candles import CandleResolution
 from tinkoff.investments.client.exceptions import TinkoffInvestmentsError
 
-client = TinkoffInvestmentsRESTClient(token='TOKEN')
-
-async def apple_year_candles() -> Candles:
+async def show_apple_year_candles():
     try:
-        candles = await client.market.candles.get(
-            figi='BBG000B9XRY4',
-            dt_from=datetime(2019, 1, 1),
-            dt_to=datetime(2019, 12, 31),
-            interval=CandleResolution.DAY
-        )
-        return candles
+        async with TinkoffInvestmentsRESTClient(
+                token='TOKEN',
+                environment=Environment.SANDBOX) as client:
+
+            candles = await client.market.candles.get(
+                figi='BBG000B9XRY4',
+                dt_from=datetime(2019, 1, 1),
+                dt_to=datetime(2019, 12, 31),
+                interval=CandleResolution.DAY
+            )
+            for candle in candles:
+                print(f'{candle.time}: {candle.h}')
     except TinkoffInvestmentsError as e:
         print(e)
 
-asyncio.run(apple_year_candles())
+asyncio.run(show_apple_year_candles())
 ```
 
 TODO
 --------------------------------------------------------------------------------
 
 * cover full Tinkoff Investments API
-* add context manager for rest client
+* rename some fields
+* make some fields in snake case
 * add streaming protocol client
 * generate documentation

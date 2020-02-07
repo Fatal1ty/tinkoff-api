@@ -4,6 +4,7 @@ from typing import Optional
 from tinkoff.investments.model.base import BaseModel, Currency
 
 
+# TODO: вынести в base?
 FigiName = str
 TickerName = str
 

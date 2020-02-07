@@ -1,22 +1,14 @@
 from dataclasses import dataclass
 from typing import List, Optional
-from enum import Enum
 
-from tinkoff.investments.model.base import BaseModel, Currency
-from tinkoff.investments.model.market.instruments import FigiName, TickerName
-
-
-class InstrumentType(Enum):
-    STOCK = 'Stock'
-    CURRENCY = 'Currency'
-    BOND = 'Bond'
-    ETF = 'Etf'
-
-
-@dataclass
-class MoneyAmount(BaseModel):
-    currency: Currency
-    value: float
+from tinkoff.investments.model.base import (
+    BaseModel,
+    Currency,
+    MoneyAmount,
+    FigiName,
+    TickerName,
+    InstrumentType,
+)
 
 
 @dataclass
@@ -53,7 +45,6 @@ class Currencies(BaseModel):
 
 __all__ = [
     'InstrumentType',
-    'MoneyAmount',
     'PortfolioPosition',
     'CurrencyPosition',
     'Portfolio',

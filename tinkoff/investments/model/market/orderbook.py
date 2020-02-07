@@ -2,8 +2,7 @@ from dataclasses import dataclass
 from typing import List, Optional
 from enum import Enum
 
-from tinkoff.investments.model.base import BaseModel
-from tinkoff.investments.model.market.instruments import FigiName
+from tinkoff.investments.model.base import BaseModel, FigiName
 
 
 class TradingStatus(Enum):

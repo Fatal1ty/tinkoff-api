@@ -3,8 +3,8 @@ from typing import Optional, List, Any
 
 from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
 
-
 from tinkoff.investments.client.exceptions import TinkoffInvestmentsUsageError
+from tinkoff.investments.model.base import FigiName, TickerName
 from tinkoff.investments.model.market.orderbook import OrderBook
 from tinkoff.investments.model.market.candles import (
     Candle,
@@ -12,8 +12,6 @@ from tinkoff.investments.model.market.candles import (
     CandleResolution,
 )
 from tinkoff.investments.model.market.instruments import (
-    FigiName,
-    TickerName,
     MarketInstrument,
     MarketInstrumentList,
 )

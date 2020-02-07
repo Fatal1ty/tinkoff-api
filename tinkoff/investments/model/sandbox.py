@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
-from tinkoff.investments.model.base import BaseModel, Currency
-from tinkoff.investments.model.market.instruments import FigiName
+from tinkoff.investments.model.base import BaseModel, Currency, FigiName
 from tinkoff.investments.model.user.accounts import (
     BrokerAccountID,
     BrokerAccountType,

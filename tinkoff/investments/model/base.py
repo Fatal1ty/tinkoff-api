@@ -8,6 +8,10 @@ from mashumaro import DataClassJSONMixin
 from mashumaro.types import SerializableType
 
 
+FigiName = str
+TickerName = str
+
+
 class BaseModel(DataClassJSONMixin):
     pass
 
@@ -27,6 +31,19 @@ class Currency(Enum):
     RUB = 'RUB'
     USD = 'USD'
     EUS = 'EUR'
+
+
+class InstrumentType(Enum):
+    STOCK = 'Stock'
+    CURRENCY = 'Currency'
+    BOND = 'Bond'
+    ETF = 'Etf'
+
+
+@dataclass
+class MoneyAmount(BaseModel):
+    currency: Currency
+    value: float
 
 
 class ISODateTime(datetime, SerializableType):

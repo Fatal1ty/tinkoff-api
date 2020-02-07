@@ -1,6 +1,5 @@
 from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
-from tinkoff.investments.model.base import Currency
-from tinkoff.investments.model.market.instruments import FigiName
+from tinkoff.investments.model.base import Currency, FigiName
 from tinkoff.investments.model.sandbox import (
     SandboxAccountRegisterRequest,
     SandboxAccount,

@@ -2,8 +2,7 @@ from dataclasses import dataclass
 from typing import List
 from enum import Enum
 
-from tinkoff.investments.model.base import BaseModel, ISODateTime
-from tinkoff.investments.model.market.instruments import FigiName
+from tinkoff.investments.model.base import BaseModel, ISODateTime, FigiName
 
 
 class CandleResolution(Enum):

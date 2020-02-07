@@ -1,12 +1,12 @@
 from dataclasses import dataclass
 from typing import Optional, List
 
-from tinkoff.investments.model.base import BaseModel, Currency
-
-
-# TODO: вынести в base?
-FigiName = str
-TickerName = str
+from tinkoff.investments.model.base import (
+    BaseModel,
+    Currency,
+    FigiName,
+    TickerName,
+)
 
 
 @dataclass
@@ -27,8 +27,6 @@ class MarketInstrumentList(BaseModel):
 
 
 __all__ = [
-    'FigiName',
-    'TickerName',
     'MarketInstrument',
     'MarketInstrumentList',
 ]

@@ -51,7 +51,31 @@ async def show_apple_year_candles():
     except TinkoffInvestmentsError as e:
         print(e)
 
-asyncio.run(show_apple_year_candles())
+
+async def jackpot():
+    try:
+        async with TinkoffInvestmentsRESTClient(
+                token='TOKEN',
+                environment=Environment.SANDBOX) as client:
+
+            instruments = await client.market.instruments.search(ticker='AAPL')
+            apple = instruments[0]
+
+            account = await client.sandbox.accounts.register()
+            await client.sandbox.accounts.positions.set_balance(
+                broker_account_id=account.brokerAccountId,
+                figi=apple.figi,
+                balance=100,
+            )
+
+            print('We created the following portfolio:')
+            positions = await client.portfolio.get_positions()
+            for position in positions:
+                print(f'{position.name}: {position.lots} lots')
+    except TinkoffInvestmentsError as e:
+        print(e)
+
+asyncio.run(jackpot())
 ```
 
 TODO

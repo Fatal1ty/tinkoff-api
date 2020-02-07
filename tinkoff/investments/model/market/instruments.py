@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, List
 
 from tinkoff.investments.model.base import BaseModel, Currency
 
@@ -20,8 +20,15 @@ class MarketInstrument(BaseModel):
     minPriceIncrement: float = None
 
 
+@dataclass
+class MarketInstrumentList(BaseModel):
+    total: int
+    instruments: List[MarketInstrument]
+
+
 __all__ = [
     'FigiName',
     'TickerName',
     'MarketInstrument',
+    'MarketInstrumentList',
 ]

@@ -6,6 +6,8 @@ from tinkoff.investments.model.user.accounts import BrokerAccountID
 from tinkoff.investments.model.portfolio import (
     PortfolioPosition,
     CurrencyPosition,
+    Portfolio,
+    Currencies,
 )
 
 
@@ -21,8 +23,7 @@ class PortfolioAPI(BaseTinkoffInvestmentsAPI):
             path='/portfolio',
             params=params,
         )
-        return [PortfolioPosition.from_dict(obj)
-                for obj in payload['positions']]
+        return Portfolio.from_dict(payload).positions
 
     async def get_currencies(self, broker_account_id=None):
         # type: (BrokerAccountID) -> List[CurrencyPosition]
@@ -35,5 +36,4 @@ class PortfolioAPI(BaseTinkoffInvestmentsAPI):
             path='/portfolio/currencies',
             params=params,
         )
-        return [CurrencyPosition.from_dict(obj)
-                for obj in payload['currencies']]
+        return Currencies.from_dict(payload).currencies

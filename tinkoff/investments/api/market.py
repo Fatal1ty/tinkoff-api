@@ -6,11 +6,16 @@ from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
 
 from tinkoff.investments.client.exceptions import TinkoffInvestmentsUsageError
 from tinkoff.investments.model.market.orderbook import OrderBook
-from tinkoff.investments.model.market.candles import Candle, CandleResolution
+from tinkoff.investments.model.market.candles import (
+    Candle,
+    Candles,
+    CandleResolution,
+)
 from tinkoff.investments.model.market.instruments import (
     FigiName,
     TickerName,
     MarketInstrument,
+    MarketInstrumentList,
 )
 
 
@@ -61,8 +66,7 @@ class MarketInstrumentsAPI(BaseTinkoffInvestmentsAPI):
             path=path,
             params=params,
         )
-        return [MarketInstrument.from_dict(obj)
-                for obj in payload['instruments']]
+        return MarketInstrumentList.from_dict(payload).instruments
 
 
 class MarketOrderBooksAPI(BaseTinkoffInvestmentsAPI):
@@ -95,7 +99,7 @@ class MarketCandlesAPI(BaseTinkoffInvestmentsAPI):
                 'interval': interval.value,
             },
         )
-        return [Candle.from_dict(obj) for obj in payload['candles']]
+        return Candles.from_dict(payload).candles
 
 
 class MarketAPI(BaseTinkoffInvestmentsAPI):

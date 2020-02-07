@@ -1,3 +1,4 @@
+from typing import List
 from dataclasses import dataclass
 from enum import Enum
 
@@ -12,7 +13,20 @@ class BrokerAccountType(Enum):
     TINKOFF_IIS = 'TinkoffIis'
 
 
+@dataclass
+class UserAccount(BaseModel):
+    brokerAccountType: BrokerAccountType
+    brokerAccountId: BrokerAccountID
+
+
+@dataclass
+class UserAccounts(BaseModel):
+    accounts: List[UserAccount]
+
+
 __all__ = [
     'BrokerAccountID',
     'BrokerAccountType',
+    'UserAccount',
+    'UserAccounts',
 ]

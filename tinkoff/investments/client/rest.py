@@ -1,7 +1,7 @@
 from typing import NoReturn, Any, Dict
 
 from tinkoff.base import BaseHTTPClient
-from tinkoff.investments.api import MarketAPI, PortfolioAPI
+from tinkoff.investments.api import MarketAPI, PortfolioAPI, UserAPI
 from tinkoff.investments.client.environments import Environment, EnvironmentURL
 from tinkoff.investments.client.exceptions import (
     TinkoffInvestmentsUnauthorizedError,
@@ -19,6 +19,7 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
         )
         self.market = MarketAPI(self)
         self.portfolio = PortfolioAPI(self)
+        self.user = UserAPI(self)
 
     async def _request(self, method, path, **kwargs):
         # type: (str, str, Any) -> Dict[Any, Any]

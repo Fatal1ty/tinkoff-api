@@ -1,7 +1,13 @@
 from typing import Any, Dict
 
 from tinkoff.base import BaseHTTPClient
-from tinkoff.investments.api import SandboxAPI, PortfolioAPI, MarketAPI, UserAPI
+from tinkoff.investments.api import (
+    SandboxAPI,
+    PortfolioAPI,
+    MarketAPI,
+    OperationsAPI,
+    UserAPI,
+)
 from tinkoff.investments.client.environments import Environment, EnvironmentURL
 from tinkoff.investments.client.exceptions import (
     TinkoffInvestmentsUnauthorizedError,
@@ -20,6 +26,7 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
         self.sandbox = SandboxAPI(self)
         self.portfolio = PortfolioAPI(self)
         self.market = MarketAPI(self)
+        self.operations = OperationsAPI(self)
         self.user = UserAPI(self)
 
     async def _request(self, method, path, **kwargs):

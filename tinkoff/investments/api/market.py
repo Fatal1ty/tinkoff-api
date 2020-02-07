@@ -30,8 +30,11 @@ from tinkoff.investments.model.market.instruments import (
 
 
 class MarketInstrumentsAPI(BaseTinkoffInvestmentsAPI):
-    async def search(self, figi=None, ticker=None):
-        # type: (Optional[FigiName], Optional[TickerName]) -> Any
+    async def search(
+            self,
+            figi: Optional[FigiName] = None,
+            ticker: Optional[TickerName] = None) -> List[MarketInstrument]:
+
         if figi:
             search_method = 'by-figi'
             params = {'figi': figi}

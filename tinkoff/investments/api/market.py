@@ -105,6 +105,6 @@ class MarketCandlesAPI(BaseTinkoffInvestmentsAPI):
 class MarketAPI(BaseTinkoffInvestmentsAPI):
     def __init__(self, *args, **kwargs):
         super(MarketAPI, self).__init__(*args, **kwargs)
-        self.instruments = MarketInstrumentsAPI(self._client)
-        self.orderbooks = MarketOrderBooksAPI(self._client)
-        self.candles = MarketCandlesAPI(self._client)
+        self.instruments = MarketInstrumentsAPI(*args, **kwargs)
+        self.orderbooks = MarketOrderBooksAPI(*args, **kwargs)
+        self.candles = MarketCandlesAPI(*args, **kwargs)

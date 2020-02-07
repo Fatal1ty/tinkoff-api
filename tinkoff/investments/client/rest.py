@@ -1,7 +1,7 @@
-from typing import NoReturn, Any, Dict
+from typing import Any, Dict
 
 from tinkoff.base import BaseHTTPClient
-from tinkoff.investments.api import MarketAPI, PortfolioAPI, UserAPI
+from tinkoff.investments.api import SandboxAPI, PortfolioAPI, MarketAPI, UserAPI
 from tinkoff.investments.client.environments import Environment, EnvironmentURL
 from tinkoff.investments.client.exceptions import (
     TinkoffInvestmentsUnauthorizedError,
@@ -10,15 +10,16 @@ from tinkoff.investments.client.exceptions import (
 
 class TinkoffInvestmentsRESTClient(BaseHTTPClient):
     def __init__(self, token, environment=Environment.PRODUCTION):
-        # type: (str, Environment) -> NoReturn
+        # type: (str, Environment) -> None
         super(TinkoffInvestmentsRESTClient, self).__init__(
             base_url=EnvironmentURL[environment],
             headers={
                 'authorization': f'Bearer {token}'
             }
         )
-        self.market = MarketAPI(self)
+        self.sandbox = SandboxAPI(self)
         self.portfolio = PortfolioAPI(self)
+        self.market = MarketAPI(self)
         self.user = UserAPI(self)
 
     async def _request(self, method, path, **kwargs):

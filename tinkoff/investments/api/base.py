@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Union, Dict, List, Any
 
 from tinkoff.investments.model.base import Error
 from tinkoff.investments.model.response import TinkoffInvestmentsAPIResponse
@@ -10,7 +10,7 @@ class BaseTinkoffInvestmentsAPI:
         self._client = client
 
     async def _request(self, method, path, **kwargs):
-        # type: (str, str, Any) -> Dict[Any, Any]
+        # type: (str, str, Any) -> Union[Dict[Any, Any], List[Any]]
         # noinspection PyProtectedMember
         data = await self._client._request(method, path, **kwargs)
         response = TinkoffInvestmentsAPIResponse.from_dict(data)

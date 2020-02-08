@@ -22,6 +22,11 @@ class OperationStatus(Enum):
     PROGRESS = 'Progress'
 
 
+class OperationType(Enum):
+    BUY = 'Buy'
+    SELL = 'Sell'
+
+
 class OperationTypeWithCommission(Enum):
     BUY = 'Buy'
     BUY_CARD = 'BuyCard'
@@ -80,6 +85,7 @@ __all__ = [
     'OperationID',
     'TradeID',
     'OperationStatus',
+    'OperationType',
     'OperationTypeWithCommission',
     'OperationTrade',
     'Operation',

@@ -3,6 +3,7 @@ from typing import Any, Dict
 from tinkoff.base import BaseHTTPClient
 from tinkoff.investments.api import (
     SandboxAPI,
+    OrdersAPI,
     PortfolioAPI,
     MarketAPI,
     OperationsAPI,
@@ -24,6 +25,7 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
             }
         )
         self.sandbox = SandboxAPI(self)
+        self.orders = OrdersAPI(self)
         self.portfolio = PortfolioAPI(self)
         self.market = MarketAPI(self)
         self.operations = OperationsAPI(self)

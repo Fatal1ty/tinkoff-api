@@ -81,8 +81,7 @@ asyncio.run(jackpot())
 TODO
 --------------------------------------------------------------------------------
 
-* cover full Tinkoff Investments API
+* add streaming protocol client
 * rename some fields
 * make some fields in snake case
-* add streaming protocol client
 * generate documentation

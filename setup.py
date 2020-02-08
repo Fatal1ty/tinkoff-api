@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="tinkoff-api",
-    version="0.1",
+    version="0.1.1",
     description="Tinkoff API",
     platforms="all",
     classifiers=[
@@ -17,7 +17,7 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
-        "Development Status :: 1 - Planning",
+        "Development Status :: 3 - Alpha",
     ],
     license="Apache License, Version 2.0",
     author="Alexander Tikhonov",

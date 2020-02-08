@@ -5,8 +5,10 @@ from setuptools import setup, find_packages
 
 setup(
     name="tinkoff-api",
-    version="0.1.1",
-    description="Tinkoff API",
+    version="0.1.2",
+    description="Python Tinkoff API client for asyncio and humans",
+    long_description=open('README.md', encoding='utf8').read(),
+    long_description_content_type='text/markdown',
     platforms="all",
     classifiers=[
         "License :: OSI Approved :: Apache Software License",

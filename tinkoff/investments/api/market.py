@@ -33,7 +33,8 @@ class MarketInstrumentsAPI(BaseTinkoffInvestmentsAPI):
     async def search(
             self,
             figi: Optional[FigiName] = None,
-            ticker: Optional[TickerName] = None) -> List[MarketInstrument]:
+            ticker: Optional[TickerName] = None
+    ) -> List[MarketInstrument]:
 
         if figi:
             search_method = 'by-figi'

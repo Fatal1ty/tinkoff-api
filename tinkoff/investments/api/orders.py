@@ -36,7 +36,8 @@ class OrdersAPI(BaseTinkoffInvestmentsAPI):
             lots: int,
             operation: OperationType,
             price: float,
-            broker_account_id: BrokerAccountID = None) -> PlacedLimitOrder:
+            broker_account_id: BrokerAccountID = None
+    ) -> PlacedLimitOrder:
 
         params = {
             'figi': figi
@@ -61,7 +62,8 @@ class OrdersAPI(BaseTinkoffInvestmentsAPI):
             figi: FigiName,
             lots: int,
             operation: OperationType,
-            broker_account_id: BrokerAccountID = None) -> PlacedMarketOrder:
+            broker_account_id: BrokerAccountID = None
+    ) -> PlacedMarketOrder:
 
         params = {
             'figi': figi

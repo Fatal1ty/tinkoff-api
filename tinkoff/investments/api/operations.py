@@ -13,7 +13,8 @@ class OperationsAPI(BaseTinkoffInvestmentsAPI):
             dt_from: datetime,
             dt_to: datetime,
             figi: FigiName = None,
-            broker_account_id: BrokerAccountID = None) -> List[Operation]:
+            broker_account_id: BrokerAccountID = None
+    ) -> List[Operation]:
 
         if not dt_from.tzinfo:
             dt_from = dt_from.replace(tzinfo=timezone.utc)

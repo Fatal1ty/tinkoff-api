@@ -81,7 +81,8 @@ asyncio.run(jackpot())
 TODO
 --------------------------------------------------------------------------------
 
-* add streaming protocol client
+* allow to provide str constants along with specific enum objects
+* add configurable timeouts in streaming client
 * rename some fields
 * make some fields in snake case
 * generate documentation

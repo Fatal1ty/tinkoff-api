@@ -1,7 +1,7 @@
 from tinkoff.investments.model.base import FigiName
 from tinkoff.investments.model.streaming import BaseEvent, BaseEventKey, EventName
 from tinkoff.investments.model.market.candles import CandleResolution
-from typing import Any, Callable, Dict, Type
+from typing import Any, Callable, Dict
 
 class CandleEventStream:
     _subscribers: Dict[BaseEventKey, Callable] = ...

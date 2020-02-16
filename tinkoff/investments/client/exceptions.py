@@ -25,6 +25,7 @@ class TinkoffInvestmentsAPIError(TinkoffInvestmentsError):
 
 
 __all__ = [
+    'TinkoffInvestmentsError',
     'TinkoffInvestmentsUsageError',
     'TinkoffInvestmentsAPIError',
     'TinkoffInvestmentsUnauthorizedError',

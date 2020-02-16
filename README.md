@@ -12,7 +12,12 @@ In active development.
 Table of contens
 --------------------------------------------------------------------------------
 * [Installation](#installation)
-* [Usage example](#usage-example)
+* [Usage examples](#usage-examples)
+    * [REST API client](#rest-api-client)
+    * [Streaming client](#streaming-client)
+    * [Dynamic subscriptions in runtime](#dynamic-subscriptions-in-runtime)
+* [TODO](#todo)
+
 
 Installation
 --------------------------------------------------------------------------------
@@ -22,10 +27,10 @@ Use pip to install:
 $ pip install tinkoff-api
 ```
 
-Usage example
+Usage examples
 --------------------------------------------------------------------------------
 
-REST API client:
+#### REST API client:
 ```python
 import asyncio
 from datetime import datetime
@@ -79,56 +84,52 @@ async def jackpot():
 asyncio.run(jackpot())
 ```
 
-Streaming Client:
+#### Streaming Client:
 ```python
 import asyncio
 
 from tinkoff.investments.client.streaming import StreamingClient, EventsBroker
 from tinkoff.investments.model.streaming import CandleEvent, CandleResolution
 
-
 events = EventsBroker()
 
-
+@events.candles('BBG009S39JX6', CandleResolution.MIN_1)
 @events.candles('BBG000B9XRY4', CandleResolution.MIN_1)
 async def on_candle(candle: CandleEvent):
     print(candle)
-
 
 async def main():
     client = StreamingClient(token='TOKEN', events=events)
     await client.run()
 
-
 asyncio.run(main())
 ```
 
-Subscribe/unsubscribe to specific events in runtime:
+#### Dynamic subscriptions in runtime:
 ```python
 import asyncio
 
 from tinkoff.investments.client.streaming import StreamingClient, EventsBroker
-from tinkoff.investments.model.streaming import CandleEvent, CandleResolution
-
+from tinkoff.investments.model.streaming import CandleEvent, CandleResolution, \
+    OrderBookEvent
 
 events = EventsBroker()
 
-
 @events.candles('BBG000B9XRY4', CandleResolution.HOUR)
 async def on_candle(candle: CandleEvent):
-    if candle.interval is CandleResolution.HOUR and candle.h > 1000:
-        await events.candles.unsubscribe(candle.figi, candle.interval)
+    if candle.h > 1000:
         await events.candles.subscribe(
             callback=on_candle,
             figi=candle.figi,
             interval=CandleResolution.MIN_1
         )
+    elif candle.h < 1000:
+        await events.candles.unsubscribe(candle.figi, CandleResolution.MIN_1)
 
 
 async def main():
     client = StreamingClient(token='TOKEN', events=events)
     await client.run()
-
 
 asyncio.run(main())
 ```
@@ -138,6 +139,7 @@ TODO
 
 * allow to provide str constants along with specific enum objects
 * add configurable timeouts in streaming client
+* add ability to unsubscribe by pattern
 * rename some fields
 * make some fields in snake case
 * generate documentation

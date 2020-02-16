@@ -33,12 +33,12 @@ class BaseEventStream:
     async def subscribe(self, callback, *args, **kwargs):
         key = self.EVENT_TYPE.key_type(*args, **kwargs)
         self._subscribers[key] = callback
-        await self._client.request(key.subscribe_key(**kwargs))
+        await self._client.request(key.subscribe_key())
 
     async def unsubscribe(self, *args, **kwargs):
         key = self.EVENT_TYPE.key_type(*args, **kwargs)
         self._subscribers.pop(key, None)
-        await self._client.request(key.unsubscribe_key(**kwargs))
+        await self._client.request(key.unsubscribe_key())
 
     async def publish(self, event: BaseEvent):
         callback = self._subscribers.get(event.key())  # TODO: сделать иначе
@@ -96,6 +96,7 @@ class StreamingClient(BaseHTTPClient):
 
     async def run(self):
         async with self._session.ws_connect(self._base_url) as ws:
+            self._ws = ws  # TODO: убрать это
             await self._run(ws)
 
     async def _run(self, ws: ClientWebSocketResponse):

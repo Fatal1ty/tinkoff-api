@@ -1,7 +1,9 @@
+from aiohttp import ClientWebSocketResponse
+from tinkoff.base import BaseHTTPClient
 from tinkoff.investments.model.base import FigiName
 from tinkoff.investments.model.streaming import BaseEvent, BaseEventKey, EventName
 from tinkoff.investments.model.market.candles import CandleResolution
-from typing import Any, Callable, Dict
+from typing import Any, Callable, Dict, List
 
 class CandleEventStream:
     _subscribers: Dict[BaseEventKey, Callable] = ...
@@ -30,7 +32,14 @@ class EventsBroker:
     def add_publisher(self, client: StreamingClient) -> None: ...
     async def publish(self, event: BaseEvent) -> None: ...
 
-# TODO: указать родительский класс
-class StreamingClient:
+class StreamingClient(BaseHTTPClient):
     events: EventsBroker = EventsBroker()
     def __init__(self, token: str, events: EventsBroker = None) -> None: ...
+    async def run(self) -> None: ...
+    async def _run(self, ws: ClientWebSocketResponse) -> None: ...
+    async def _subscribe_to_streams(self, ws: ClientWebSocketResponse) -> None: ...
+    @property
+    def _event_streams(self):
+        return (self.events.candles, self.events.orderbooks,
+                self.events.instrument_info)
+    def _subscription_keys(self) -> List[Dict[str, Any]]: ...

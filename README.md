@@ -57,7 +57,6 @@ async def show_apple_year_candles():
     except TinkoffInvestmentsError as e:
         print(e)
 
-
 async def jackpot():
     try:
         async with TinkoffInvestmentsRESTClient(
@@ -125,7 +124,6 @@ async def on_candle(candle: CandleEvent):
         )
     elif candle.h < 1000:
         await events.candles.unsubscribe(candle.figi, CandleResolution.MIN_1)
-
 
 async def main():
     client = StreamingClient(token='TOKEN', events=events)

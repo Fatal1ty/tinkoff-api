@@ -25,6 +25,7 @@ $ pip install tinkoff-api
 Usage example
 --------------------------------------------------------------------------------
 
+REST API client:
 ```python
 import asyncio
 from datetime import datetime
@@ -76,6 +77,60 @@ async def jackpot():
         print(e)
 
 asyncio.run(jackpot())
+```
+
+Streaming Client:
+```python
+import asyncio
+
+from tinkoff.investments.client.streaming import StreamingClient, EventsBroker
+from tinkoff.investments.model.streaming import CandleEvent, CandleResolution
+
+
+events = EventsBroker()
+
+
+@events.candles('BBG000B9XRY4', CandleResolution.MIN_1)
+async def on_candle(candle: CandleEvent):
+    print(candle)
+
+
+async def main():
+    client = StreamingClient(token='TOKEN', events=events)
+    await client.run()
+
+
+asyncio.run(main())
+```
+
+Subscribe/unsubscribe to specific events in runtime:
+```python
+import asyncio
+
+from tinkoff.investments.client.streaming import StreamingClient, EventsBroker
+from tinkoff.investments.model.streaming import CandleEvent, CandleResolution
+
+
+events = EventsBroker()
+
+
+@events.candles('BBG000B9XRY4', CandleResolution.HOUR)
+async def on_candle(candle: CandleEvent):
+    if candle.interval is CandleResolution.HOUR and candle.h > 1000:
+        await events.candles.unsubscribe(candle.figi, candle.interval)
+        await events.candles.subscribe(
+            callback=on_candle,
+            figi=candle.figi,
+            interval=CandleResolution.MIN_1
+        )
+
+
+async def main():
+    client = StreamingClient(token='TOKEN', events=events)
+    await client.run()
+
+
+asyncio.run(main())
 ```
 
 TODO

@@ -1,0 +1,131 @@
+import asyncio
+from typing import Any, Dict, Type, Optional, Callable, List
+
+from aiohttp import ClientWebSocketResponse, WSMsgType
+
+from tinkoff.base import BaseHTTPClient
+from tinkoff.investments.client.environments import Environment, EnvironmentURL
+from tinkoff.investments.model.streaming import (
+    BaseEvent,
+    CandleEvent,
+    OrderBookEvent,
+    InstrumentInfoEvent,
+    BaseEventKey,
+    StreamingMessage,
+    EventName,
+)
+
+
+class BaseEventStream:
+    EVENT_TYPE: Type[BaseEvent] = None
+
+    def __init__(self):
+        self._subscribers = {}  # type: Dict[BaseEventKey, Callable]
+        self._client = None     # type: Optional[StreamingClient]
+
+    def __call__(self, *args, **kwargs):
+        def decorator(callback):
+            self._subscribers[
+                self.EVENT_TYPE.key_type(*args, **kwargs)] = callback
+            return callback
+        return decorator
+
+    async def subscribe(self, callback, *args, **kwargs):
+        key = self.EVENT_TYPE.key_type(*args, **kwargs)
+        self._subscribers[key] = callback
+        await self._client.request(key.subscribe_key(**kwargs))
+
+    async def unsubscribe(self, *args, **kwargs):
+        key = self.EVENT_TYPE.key_type(*args, **kwargs)
+        self._subscribers.pop(key, None)
+        await self._client.request(key.unsubscribe_key(**kwargs))
+
+    async def publish(self, event: BaseEvent):
+        callback = self._subscribers.get(event.key())  # TODO: сделать иначе
+        if callback:
+            await callback(event)
+
+
+class CandleEventStream(BaseEventStream):
+    EVENT_TYPE = CandleEvent
+
+
+class OrderBookEventStream(BaseEventStream):
+    EVENT_TYPE = OrderBookEvent
+
+
+class InstrumentInfoEventStream(BaseEventStream):
+    EVENT_TYPE = InstrumentInfoEvent
+
+
+class EventsBroker:
+    def __init__(self):
+        self.candles = CandleEventStream()
+        self.orderbooks = OrderBookEventStream()
+        self.instrument_info = InstrumentInfoEventStream()
+
+        self._routes = {
+            EventName.CANDLE: self.candles,
+            EventName.ORDERBOOK: self.orderbooks,
+            EventName.INSTRUMENT_INFO: self.instrument_info,
+        }
+
+    def add_publisher(self, client: 'StreamingClient'):
+        self.candles._client = client
+        self.orderbooks._client = client
+        self.instrument_info._client = client
+
+    async def publish(self, event: BaseEvent):
+        await self._routes[event.event_name].publish(event)
+
+
+class StreamingClient(BaseHTTPClient):
+    def __init__(self, token: str, events: EventsBroker = None):
+        super().__init__(
+            base_url=EnvironmentURL[Environment.STREAMING],
+            headers={
+                'authorization': f'Bearer {token}'
+            }
+        )
+        self.events = events or EventsBroker()
+        self.events.add_publisher(self)
+        self._ws = None  # type: Optional[ClientWebSocketResponse]
+
+    async def request(self, key: Dict[str, Any]):
+        await self._ws.send_json(key)
+
+    async def run(self):
+        async with self._session.ws_connect(self._base_url) as ws:
+            await self._run(ws)
+
+    async def _run(self, ws: ClientWebSocketResponse):
+        await self._subscribe_to_streams(ws)
+        async for msg in ws:
+            # noinspection PyUnresolvedReferences
+            if msg.type == WSMsgType.TEXT:
+                # noinspection PyUnresolvedReferences
+                msg = StreamingMessage.from_json(msg.data)
+                await self.events.publish(msg.parsed_payload)
+
+    async def _subscribe_to_streams(self, ws: ClientWebSocketResponse):
+        coros = (ws.send_json(key) for key in self._subscription_keys())
+        await asyncio.gather(*coros)
+
+    @property
+    def _event_streams(self):
+        return (self.events.candles, self.events.orderbooks,
+                self.events.instrument_info)
+
+    def _subscription_keys(self) -> List[Dict[str, Any]]:
+        keys = []
+        for event_stream in self._event_streams:
+            # noinspection PyProtectedMember
+            keys.extend([key.subscribe_key()
+                         for key in event_stream._subscribers.keys()])
+        return keys
+
+
+__all__ = [
+    'EventsBroker',
+    'StreamingClient'
+]

@@ -16,6 +16,7 @@ Table of contens
     * [REST API client](#rest-api-client)
     * [Streaming client](#streaming-client)
     * [Dynamic subscriptions in runtime](#dynamic-subscriptions-in-runtime)
+    * [Complete simple bot](#complete-simple-bot)
 * [TODO](#todo)
 
 
@@ -88,21 +89,17 @@ asyncio.run(jackpot())
 import asyncio
 
 from tinkoff.investments import (
-    StreamingClient, EventsBroker, CandleEvent, CandleResolution
+    TinkoffInvestmentsStreamingClient, CandleEvent, CandleResolution
 )
 
-events = EventsBroker()
+client = TinkoffInvestmentsStreamingClient(token='TOKEN')
 
-@events.candles('BBG009S39JX6', CandleResolution.MIN_1)
-@events.candles('BBG000B9XRY4', CandleResolution.MIN_1)
+@client.events.candles('BBG009S39JX6', CandleResolution.MIN_1)
+@client.events.candles('BBG000B9XRY4', CandleResolution.MIN_1)
 async def on_candle(candle: CandleEvent):
     print(candle)
 
-async def main():
-    client = StreamingClient(token='TOKEN', events=events)
-    await client.run()
-
-asyncio.run(main())
+asyncio.run(client.run())
 ```
 
 #### Dynamic subscriptions in runtime:
@@ -110,27 +107,50 @@ asyncio.run(main())
 import asyncio
 
 from tinkoff.investments import (
-    StreamingClient, EventsBroker, CandleEvent, CandleResolution
+    TinkoffInvestmentsStreamingClient, CandleEvent, CandleResolution
 )
 
-events = EventsBroker()
+client = TinkoffInvestmentsStreamingClient(token='TOKEN')
 
-@events.candles('BBG000B9XRY4', CandleResolution.HOUR)
+@client.events.candles('BBG000B9XRY4', CandleResolution.HOUR)
 async def on_candle(candle: CandleEvent):
     if candle.h > 1000:
-        await events.candles.subscribe(
+        await client.events.candles.subscribe(
             callback=on_candle,
             figi=candle.figi,
             interval=CandleResolution.MIN_1
         )
     elif candle.h < 1000:
-        await events.candles.unsubscribe(candle.figi, CandleResolution.MIN_1)
+        await client.events.candles.unsubscribe(
+            candle.figi, CandleResolution.MIN_1
+        )
 
-async def main():
-    client = StreamingClient(token='TOKEN', events=events)
-    await client.run()
+asyncio.run(client.run())
+```
 
-asyncio.run(main())
+### Complete simple bot
+```python
+import asyncio
+from tinkoff.investments import (
+    TinkoffInvestmentsStreamingClient, TinkoffInvestmentsRESTClient,
+    CandleEvent, CandleResolution, OperationType
+)
+
+streaming = TinkoffInvestmentsStreamingClient('TOKEN')
+rest = TinkoffInvestmentsRESTClient('TOKEN')
+
+@streaming.events.candles('BBG000B9XRY4', CandleResolution.MIN_1)
+async def buy_apple(candle: CandleEvent):
+    if candle.c > 350:
+        await rest.orders.create_market_order(
+            figi='BBG000B9XRY4',
+            lots=1,
+            operation=OperationType.BUY,
+            broker_account_id=123,
+        )
+
+asyncio.run(streaming.run())
+
 ```
 
 TODO

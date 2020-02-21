@@ -21,7 +21,7 @@ class BaseEventStream:
 
     def __init__(self):
         self._subscribers = {}  # type: Dict[BaseEventKey, Callable]
-        self._client = None     # type: Optional[StreamingClient]
+        self._client = None     # type: Optional[TinkoffInvestmentsStreamingClient]
 
     def __call__(self, *args, **kwargs):
         def decorator(callback):
@@ -70,7 +70,7 @@ class EventsBroker:
             EventName.INSTRUMENT_INFO: self.instrument_info,
         }
 
-    def add_publisher(self, client: 'StreamingClient'):
+    def add_publisher(self, client: 'TinkoffInvestmentsStreamingClient'):
         self.candles._client = client
         self.orderbooks._client = client
         self.instrument_info._client = client
@@ -79,7 +79,7 @@ class EventsBroker:
         await self._routes[event.event_name].publish(event)
 
 
-class StreamingClient(BaseHTTPClient):
+class TinkoffInvestmentsStreamingClient(BaseHTTPClient):
     def __init__(
             self,
             token: str,
@@ -152,5 +152,5 @@ class StreamingClient(BaseHTTPClient):
 
 __all__ = [
     'EventsBroker',
-    'StreamingClient'
+    'TinkoffInvestmentsStreamingClient'
 ]

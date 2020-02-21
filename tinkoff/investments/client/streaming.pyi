@@ -3,7 +3,7 @@ from tinkoff.base import BaseHTTPClient
 from tinkoff.investments.model.base import FigiName
 from tinkoff.investments.model.streaming import BaseEvent, BaseEventKey, EventName
 from tinkoff.investments.model.market.candles import CandleResolution
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, List, Optional
 
 class CandleEventStream:
     _subscribers: Dict[BaseEventKey, Callable] = ...
@@ -34,7 +34,17 @@ class EventsBroker:
 
 class StreamingClient(BaseHTTPClient):
     events: EventsBroker = EventsBroker()
-    def __init__(self, token: str, events: EventsBroker = None) -> None: ...
+    _receive_timeout: Optional[float]
+    _heartbeat: Optional[float]
+    _reconnect_timeout: float
+    def __init__(
+            self,
+            token: str,
+            events: EventsBroker = None,
+            receive_timeout: Optional[float] = 5,
+            heartbeat: Optional[float] = 3,
+            reconnect_timeout: float = 3
+    ) -> None: ...
     async def run(self) -> None: ...
     async def _run(self, ws: ClientWebSocketResponse) -> None: ...
     async def _subscribe_to_streams(self, ws: ClientWebSocketResponse) -> None: ...

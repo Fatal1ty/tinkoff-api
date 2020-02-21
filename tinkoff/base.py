@@ -10,6 +10,8 @@ class BaseHTTPClient:
         self.__headers = headers
         self.__session = None  # type: Optional[aiohttp.ClientSession]
 
+        self._closed = False
+
     @property
     def _session(self):
         if not self.__session:
@@ -17,7 +19,12 @@ class BaseHTTPClient:
         return self.__session
 
     async def close(self):
+        self._closed = True
         await self._session.close()
+
+    @property
+    def closed(self):
+        return self._closed
 
 
 # noinspection PyPep8Naming

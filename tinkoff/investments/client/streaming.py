@@ -1,7 +1,7 @@
 import asyncio
 from typing import Any, Dict, Type, Optional, Callable, List
 
-from aiohttp import ClientWebSocketResponse, WSMsgType
+from aiohttp import ClientWebSocketResponse, WSMsgType, ClientConnectionError
 
 from tinkoff.base import BaseHTTPClient
 from tinkoff.investments.client.environments import Environment, EnvironmentURL
@@ -80,7 +80,14 @@ class EventsBroker:
 
 
 class StreamingClient(BaseHTTPClient):
-    def __init__(self, token: str, events: EventsBroker = None):
+    def __init__(
+            self,
+            token: str,
+            events: EventsBroker = None,
+            receive_timeout: Optional[float] = 5,
+            heartbeat: Optional[float] = 3,
+            reconnect_timeout: float = 3,
+    ):
         super().__init__(
             base_url=EnvironmentURL[Environment.STREAMING],
             headers={
@@ -90,14 +97,31 @@ class StreamingClient(BaseHTTPClient):
         self.events = events or EventsBroker()
         self.events.add_publisher(self)
         self._ws = None  # type: Optional[ClientWebSocketResponse]
+        self._receive_timeout = receive_timeout
+        self._heartbeat = heartbeat
+        self._reconnect_timeout = reconnect_timeout
 
     async def request(self, key: Dict[str, Any]):
-        await self._ws.send_json(key)
+        if self._ws:
+            await self._ws.send_json(key)
 
     async def run(self):
-        async with self._session.ws_connect(self._base_url) as ws:
-            self._ws = ws  # TODO: убрать это
-            await self._run(ws)
+        while not self.closed:
+            if self._session.closed:
+                return
+            try:
+                async with self._session.ws_connect(
+                    url=self._base_url,
+                    timeout=0.,
+                    receive_timeout=self._receive_timeout,
+                    heartbeat=self._heartbeat,
+                ) as ws:
+                    self._ws = ws
+                    await self._run(ws)
+            except asyncio.TimeoutError:
+                await asyncio.sleep(self._reconnect_timeout)
+            except ClientConnectionError:
+                await asyncio.sleep(self._reconnect_timeout)
 
     async def _run(self, ws: ClientWebSocketResponse):
         await self._subscribe_to_streams(ws)

@@ -35,7 +35,6 @@ Usage examples
 ```python
 import asyncio
 from datetime import datetime
-
 from tinkoff.investments import (
     TinkoffInvestmentsRESTClient, Environment,CandleResolution
 )
@@ -87,7 +86,6 @@ asyncio.run(jackpot())
 #### Streaming Client:
 ```python
 import asyncio
-
 from tinkoff.investments import (
     TinkoffInvestmentsStreamingClient, CandleEvent, CandleResolution
 )
@@ -105,7 +103,6 @@ asyncio.run(client.run())
 #### Dynamic subscriptions in runtime:
 ```python
 import asyncio
-
 from tinkoff.investments import (
     TinkoffInvestmentsStreamingClient, CandleEvent, CandleResolution
 )

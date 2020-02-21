@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from datetime import datetime
 from enum import Enum
 from typing import Dict, List, Optional, ClassVar, Type, TypeVar, Any
 
@@ -112,6 +111,9 @@ class ErrorEvent(BaseEvent):
     event_name = EventName.ERROR
     error: str
     request_id: Optional[str] = None
+
+    def key(self):
+        raise NotImplementedError
 
 
 @dataclass

@@ -11,7 +11,7 @@ class TradingStatus(Enum):
 
 
 @dataclass
-class Order(BaseModel):
+class OrderBookEntity(BaseModel):
     price: float
     quantity: int
 
@@ -20,8 +20,8 @@ class Order(BaseModel):
 class OrderBook(BaseModel):
     figi: FigiName
     depth: int
-    bids: List[Order]
-    asks: List[Order]
+    bids: List[OrderBookEntity]
+    asks: List[OrderBookEntity]
     tradeStatus: TradingStatus
     minPriceIncrement: float
     faceValue: Optional[float] = None
@@ -33,6 +33,6 @@ class OrderBook(BaseModel):
 
 __all__ = [
     'TradingStatus',
-    'Order',
+    'OrderBookEntity',
     'OrderBook',
 ]

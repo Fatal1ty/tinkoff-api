@@ -35,9 +35,9 @@ Usage examples
 import asyncio
 from datetime import datetime
 
-from tinkoff.investments.client import TinkoffInvestmentsRESTClient
-from tinkoff.investments.client.environments import Environment
-from tinkoff.investments.model.market.candles import CandleResolution
+from tinkoff.investments import (
+    TinkoffInvestmentsRESTClient, Environment,CandleResolution
+)
 from tinkoff.investments.client.exceptions import TinkoffInvestmentsError
 
 async def show_apple_year_candles():
@@ -87,8 +87,9 @@ asyncio.run(jackpot())
 ```python
 import asyncio
 
-from tinkoff.investments.client.streaming import StreamingClient, EventsBroker
-from tinkoff.investments.model.streaming import CandleEvent, CandleResolution
+from tinkoff.investments import (
+    StreamingClient, EventsBroker, CandleEvent, CandleResolution
+)
 
 events = EventsBroker()
 
@@ -108,9 +109,9 @@ asyncio.run(main())
 ```python
 import asyncio
 
-from tinkoff.investments.client.streaming import StreamingClient, EventsBroker
-from tinkoff.investments.model.streaming import CandleEvent, CandleResolution, \
-    OrderBookEvent
+from tinkoff.investments import (
+    StreamingClient, EventsBroker, CandleEvent, CandleResolution
+)
 
 events = EventsBroker()
 

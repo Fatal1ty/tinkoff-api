@@ -125,7 +125,7 @@ async def on_candle(candle: CandleEvent):
 asyncio.run(client.run())
 ```
 
-### Complete simple bot
+#### Complete simple bot:
 ```python
 import asyncio
 from tinkoff.investments import (

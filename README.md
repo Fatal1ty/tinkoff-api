@@ -154,6 +154,7 @@ TODO
 --------------------------------------------------------------------------------
 
 * allow to provide str constants along with specific enum objects
+* add request limiter
 * add ability to unsubscribe by pattern
 * rename some fields
 * make some fields in snake case

@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="tinkoff-api",
-    version="0.1.2",
+    version="0.2",
     description="Python Tinkoff API client for asyncio and humans",
     long_description=open('README.md', encoding='utf8').read(),
     long_description_content_type='text/markdown',
@@ -19,7 +19,7 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
     ],
     license="Apache License, Version 2.0",
     author="Alexander Tikhonov",

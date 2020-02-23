@@ -6,7 +6,9 @@ from mashumaro import DataClassJSONMixin
 
 from tinkoff.base import classproperty
 from tinkoff.investments.model.base import BaseModel, FigiName, ISODateTime
-from tinkoff.investments.model.market.candles import CandleResolution
+from tinkoff.investments.model.market.candles import Candle, CandleResolution
+from tinkoff.investments.model.market.orderbook import OrderBook
+from tinkoff.investments.model.market.instruments import MarketInstrument
 
 
 class EventName(Enum):
@@ -77,6 +79,19 @@ class CandleEvent(BaseEvent):
     def key(self):
         return self.key_type(figi=self.figi, interval=self.interval)
 
+    @classmethod
+    def from_candle(cls, candle: Candle) -> 'CandleEvent':
+        return CandleEvent(
+            figi=candle.figi,
+            time=candle.time,
+            interval=candle.interval,
+            o=candle.o,
+            c=candle.c,
+            h=candle.h,
+            l=candle.l,
+            v=candle.v
+        )
+
 
 @dataclass
 class OrderBookEvent(BaseEvent):
@@ -89,6 +104,15 @@ class OrderBookEvent(BaseEvent):
 
     def key(self):
         return self.key_type(figi=self.figi, depth=self.depth)
+
+    @classmethod
+    def from_orderbook(cls, orderbook: OrderBook) -> 'OrderBookEvent':
+        return OrderBookEvent(
+            figi=orderbook.figi,
+            depth=orderbook.depth,
+            bids=[[e.price, e.quantity] for e in orderbook.bids],
+            asks=[[e.price, e.quantity] for e in orderbook.asks],
+        )
 
 
 @dataclass

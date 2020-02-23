@@ -14,6 +14,10 @@ class TinkoffInvestmentsUnauthorizedError(TinkoffInvestmentsError):
         return 'Have you missed the real token?'
 
 
+class TinkoffInvestmentsTooManyRequestsError(TinkoffInvestmentsError):
+    pass
+
+
 class TinkoffInvestmentsAPIError(TinkoffInvestmentsError):
     def __init__(self, tracking_id: str, status: Status, error: Error):
         self.trackingId = tracking_id
@@ -29,4 +33,5 @@ __all__ = [
     'TinkoffInvestmentsUsageError',
     'TinkoffInvestmentsAPIError',
     'TinkoffInvestmentsUnauthorizedError',
+    'TinkoffInvestmentsTooManyRequestsError',
 ]

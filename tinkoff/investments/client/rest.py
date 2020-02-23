@@ -11,7 +11,7 @@ from tinkoff.investments.api import (
 )
 from tinkoff.investments.client.environments import Environment, EnvironmentURL
 from tinkoff.investments.client.exceptions import (
-    TinkoffInvestmentsUnauthorizedError,
+    TinkoffInvestmentsUnauthorizedError, TinkoffInvestmentsTooManyRequestsError
 )
 
 
@@ -40,6 +40,8 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
         )
         if response.status == 401:
             raise TinkoffInvestmentsUnauthorizedError
+        elif response.status == 429:
+            raise TinkoffInvestmentsTooManyRequestsError
         else:
             # TODO: ловить другие исключения, если в ответе не json
             return await response.json()

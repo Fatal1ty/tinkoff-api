@@ -4,9 +4,9 @@ from yarl import URL
 
 
 class Environment(Enum):
-    SANDBOX = 'SANDBOX'
-    PRODUCTION = 'PRODUCTION'
-    STREAMING = 'STREAMING'
+    SANDBOX = 'sandbox'
+    PRODUCTION = 'production'
+    STREAMING = 'streaming'
 
 
 EnvironmentURL = {

@@ -8,7 +8,6 @@ from tinkoff.base import classproperty
 from tinkoff.investments.model.base import BaseModel, FigiName, ISODateTime
 from tinkoff.investments.model.market.candles import Candle, CandleResolution
 from tinkoff.investments.model.market.orderbook import OrderBook
-from tinkoff.investments.model.market.instruments import MarketInstrument
 
 
 class EventName(Enum):

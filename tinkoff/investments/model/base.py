@@ -53,4 +53,8 @@ class ISODateTime(datetime, SerializableType):
 
     @classmethod
     def _deserialize(cls, value):
-        return ciso8601.parse_datetime(value)
+        dt = ciso8601.parse_datetime(value)
+        return cls(
+            dt.year, dt.month, dt.day, dt.hour, dt.minute,
+            dt.second, dt.microsecond, dt.tzinfo
+        )

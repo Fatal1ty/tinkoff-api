@@ -41,12 +41,13 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
 
     async def _request(self, method, path, **kwargs):
         # type: (str, str, Any) -> Dict[Any, Any]
-        async with self.rate_limit:
-            response = await self._session.request(
-                method=method,
-                url=self._base_url / path.lstrip('/'),
-                **kwargs
-            )
+        if self.rate_limit:
+            await self.rate_limit.acquire()
+        response = await self._session.request(
+            method=method,
+            url=self._base_url / path.lstrip('/'),
+            **kwargs
+        )
         if response.status == 401:
             raise TinkoffInvestmentsUnauthorizedError
         elif response.status == 429:

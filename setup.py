@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="tinkoff-api",
-    version="0.3",
+    version="0.4",
     description="Python Tinkoff API client for asyncio and humans",
     long_description=open('README.md', encoding='utf8').read(),
     long_description_content_type='text/markdown',

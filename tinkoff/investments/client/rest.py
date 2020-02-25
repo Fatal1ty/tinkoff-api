@@ -1,6 +1,6 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
-from tinkoff.base import BaseHTTPClient
+from tinkoff.base import BaseHTTPClient, RateLimiter
 from tinkoff.investments.api import (
     SandboxAPI,
     OrdersAPI,
@@ -16,13 +16,20 @@ from tinkoff.investments.client.exceptions import (
 
 
 class TinkoffInvestmentsRESTClient(BaseHTTPClient):
-    def __init__(self, token, environment=Environment.PRODUCTION):
-        # type: (str, Environment) -> None
+    def __init__(
+            self,
+            token: str,
+            environment: Environment = Environment.PRODUCTION,
+            timeout: Optional[float] = 5,
+            rate_limit: Optional[RateLimiter] = RateLimiter(rate=120, period=60)
+    ):
+
         super(TinkoffInvestmentsRESTClient, self).__init__(
             base_url=EnvironmentURL[environment],
             headers={
                 'authorization': f'Bearer {token}'
-            }
+            },
+            timeout=timeout,
         )
         self.sandbox = SandboxAPI(self)
         self.orders = OrdersAPI(self)
@@ -30,14 +37,16 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
         self.market = MarketAPI(self)
         self.operations = OperationsAPI(self)
         self.user = UserAPI(self)
+        self.rate_limit = rate_limit
 
     async def _request(self, method, path, **kwargs):
         # type: (str, str, Any) -> Dict[Any, Any]
-        response = await self._session.request(
-            method=method,
-            url=self._base_url / path.lstrip('/'),
-            **kwargs
-        )
+        async with self.rate_limit:
+            response = await self._session.request(
+                method=method,
+                url=self._base_url / path.lstrip('/'),
+                **kwargs
+            )
         if response.status == 401:
             raise TinkoffInvestmentsUnauthorizedError
         elif response.status == 429:

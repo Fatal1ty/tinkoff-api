@@ -21,7 +21,7 @@ class BaseEventStream:
 
     def __init__(self):
         self._subscribers = {}  # type: Dict[BaseEventKey, Callable]
-        self._client = None     # type: Optional[TinkoffInvestmentsStreamingClient]
+        self._client = None  # type: Optional[TinkoffInvestmentsStreamingClient]
 
     def __call__(self, *args, **kwargs):
         def decorator(callback):

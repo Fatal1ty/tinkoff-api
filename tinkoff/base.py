@@ -44,6 +44,10 @@ class classproperty(object):
         return self.f(owner)
 
 
+class RateLimitReached(Exception):
+    pass
+
+
 class RateLimiter:
     def __init__(self, rate: int, period: float):
         self.rate = rate
@@ -56,8 +60,10 @@ class RateLimiter:
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         pass
 
-    async def acquire(self):
+    async def acquire(self, blocking=True):
         while not self._try_to_acquire():
+            if not blocking:
+                raise RateLimitReached
             await asyncio.sleep(0.25)
 
     def _try_to_acquire(self):
@@ -78,4 +84,5 @@ __all__ = [
     'BaseHTTPClient',
     'classproperty',
     'RateLimiter',
+    'RateLimitReached',
 ]

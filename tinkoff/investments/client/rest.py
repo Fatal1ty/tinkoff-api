@@ -1,3 +1,4 @@
+import asyncio
 from typing import Any, Dict, Optional
 
 from tinkoff.base import BaseHTTPClient, RateLimiter
@@ -11,7 +12,9 @@ from tinkoff.investments.api import (
 )
 from tinkoff.investments.client.environments import Environment, EnvironmentURL
 from tinkoff.investments.client.exceptions import (
-    TinkoffInvestmentsUnauthorizedError, TinkoffInvestmentsTooManyRequestsError
+    TinkoffInvestmentsUnauthorizedError,
+    TinkoffInvestmentsTooManyRequestsError,
+    TinkoffInvestmentsTimeoutError,
 )
 
 
@@ -41,20 +44,23 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
 
     async def _request(self, method, path, **kwargs):
         # type: (str, str, Any) -> Dict[Any, Any]
-        if self.rate_limit:
-            await self.rate_limit.acquire()
-        response = await self._session.request(
-            method=method,
-            url=self._base_url / path.lstrip('/'),
-            **kwargs
-        )
-        if response.status == 401:
-            raise TinkoffInvestmentsUnauthorizedError
-        elif response.status == 429:
-            raise TinkoffInvestmentsTooManyRequestsError
-        else:
-            # TODO: ловить другие исключения, если в ответе не json
-            return await response.json()
+        try:
+            if self.rate_limit:
+                await self.rate_limit.acquire()
+            response = await self._session.request(
+                method=method,
+                url=self._base_url / path.lstrip('/'),
+                **kwargs
+            )
+            if response.status == 401:
+                raise TinkoffInvestmentsUnauthorizedError
+            elif response.status == 429:
+                raise TinkoffInvestmentsTooManyRequestsError
+            else:
+                # TODO: ловить другие исключения, если в ответе не json
+                return await response.json()
+        except asyncio.TimeoutError:
+            raise TinkoffInvestmentsTimeoutError from None
 
     async def __aenter__(self):
         return self

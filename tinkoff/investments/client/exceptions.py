@@ -1,3 +1,5 @@
+from asyncio import TimeoutError
+
 from tinkoff.investments.model.base import Error, Status
 
 
@@ -18,6 +20,10 @@ class TinkoffInvestmentsTooManyRequestsError(TinkoffInvestmentsError):
     pass
 
 
+class TinkoffInvestmentsTimeoutError(TinkoffInvestmentsError, TimeoutError):
+    pass
+
+
 class TinkoffInvestmentsAPIError(TinkoffInvestmentsError):
     def __init__(self, tracking_id: str, status: Status, error: Error):
         self.trackingId = tracking_id
@@ -34,4 +40,5 @@ __all__ = [
     'TinkoffInvestmentsAPIError',
     'TinkoffInvestmentsUnauthorizedError',
     'TinkoffInvestmentsTooManyRequestsError',
+    'TinkoffInvestmentsTimeoutError',
 ]

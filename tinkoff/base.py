@@ -1,7 +1,7 @@
 import time
 import asyncio
 from collections import deque
-from typing import Optional, Dict
+from typing import Optional, Dict, Deque
 
 import aiohttp
 from yarl import URL
@@ -52,7 +52,7 @@ class RateLimiter:
     def __init__(self, rate: int, period: float):
         self.rate = rate
         self.period = period
-        self.request_times = deque()
+        self.request_times: Deque[float] = deque()
 
     async def __aenter__(self):
         await self.acquire()

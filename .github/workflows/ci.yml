@@ -1,0 +1,24 @@
+name: Python package
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+    - name: Install dependencies
+      run: make devel
+    - name: Test with mypy
+      run: make mypy
+    - name: Link with flake8
+      run: make flake

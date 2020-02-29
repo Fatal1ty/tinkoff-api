@@ -25,6 +25,12 @@ setup(
     author="Alexander Tikhonov",
     author_email="random.gauss@gmail.com",
     url='https://github.com/Fatal1ty/tinkoff-api',
+    package_data={
+        "tinkoff": [
+            "py.typed",
+            "investments/client/streaming.pyi"
+        ]
+    },
     packages=find_packages(exclude=("tests",)),
     python_requires=">=3.6",
     install_requires=[

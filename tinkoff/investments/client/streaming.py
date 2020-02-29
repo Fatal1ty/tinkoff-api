@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from typing import Any, Dict, Type, Optional, Callable, List
 
 from aiohttp import ClientWebSocketResponse, WSMsgType, ClientConnectionError
@@ -14,6 +15,9 @@ from tinkoff.investments.model.streaming import (
     StreamingMessage,
     EventName,
 )
+
+
+logger = logging.getLogger('streaming-api')
 
 
 class BaseEventStream:
@@ -130,7 +134,12 @@ class TinkoffInvestmentsStreamingClient(BaseHTTPClient):
             if msg.type == WSMsgType.TEXT:
                 # noinspection PyUnresolvedReferences
                 msg = StreamingMessage.from_json(msg.data)
-                await self.events.publish(msg.parsed_payload)
+                try:
+                    await self.events.publish(msg.parsed_payload)
+                except Exception as e:
+                    logger.exception(
+                        'Unhandled exception in streaming event handler: %s', e
+                    )
 
     async def _subscribe_to_streams(self, ws: ClientWebSocketResponse):
         coros = (ws.send_json(key) for key in self._subscription_keys())

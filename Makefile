@@ -2,6 +2,7 @@
 
 all: devel test
 devel:
+	pip install --upgrade pip
 	pip install -e .
 	pip install -r requirements-dev.txt
 test: mypy flake

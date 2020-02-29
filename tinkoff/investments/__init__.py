@@ -11,7 +11,7 @@ from .model.orders import (
     OrderID, OrderStatus, OrderType, Order, PlacedMarketOrder, PlacedLimitOrder
 )
 from .model.operations import (
-    OperationID, TradeID, OperationStatus, OperationType ,
+    OperationID, TradeID, OperationStatus, OperationType,
     OperationTypeWithCommission, OperationTrade, Operation
 )
 from .model.portfolio import PortfolioPosition, CurrencyPosition

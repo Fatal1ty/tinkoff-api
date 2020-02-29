@@ -4,6 +4,8 @@ all: devel test
 devel:
 	pip install -e .
 	pip install -r requirements-dev.txt
-test: mypy
+test: mypy flake
 mypy:
 	mypy tinkoff
+flake:
+	flake8 tinkoff

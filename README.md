@@ -2,7 +2,7 @@
 
 > Python Tinkoff API client for asyncio and humans.
 
-![build](https://github.com/Fatal1ty/tinkoff-api/workflows/build/badge.svg)(https://github.com/Fatal1ty/tinkoff-api/actions?query=workflow%3Abuild)
+[![build](https://github.com/Fatal1ty/tinkoff-api/workflows/build/badge.svg)](https://github.com/Fatal1ty/tinkoff-api/actions?query=workflow%3Abuild)
 [![Latest Version](https://img.shields.io/pypi/v/tinkoff-api.svg)](https://pypi.python.org/pypi/tinkoff-api)
 [![Python Version](https://img.shields.io/pypi/pyversions/tinkoff-api.svg)](https://pypi.python.org/pypi/tinkoff-api)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)

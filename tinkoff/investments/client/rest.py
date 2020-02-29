@@ -18,8 +18,7 @@ from tinkoff.investments.client.exceptions import (
 )
 
 
-class DEFAULT:
-    pass
+DEFAULT = object()
 
 
 class TinkoffInvestmentsRESTClient(BaseHTTPClient):
@@ -28,7 +27,7 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
             token: str,
             environment: Environment = Environment.PRODUCTION,
             timeout: Optional[float] = 5,
-            rate_limit: Optional[RateLimiter] = DEFAULT,
+            rate_limit: Optional[RateLimiter] = DEFAULT,  # type: ignore
             wait_on_rate_limit: bool = True,
     ):
 
@@ -45,6 +44,7 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
         self.market = MarketAPI(self)
         self.operations = OperationsAPI(self)
         self.user = UserAPI(self)
+        self.rate_limit: Optional[RateLimiter]
         if rate_limit is DEFAULT:
             self.rate_limit = RateLimiter(rate=120, period=60)
         else:

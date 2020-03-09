@@ -18,16 +18,12 @@ from tinkoff.investments.client.exceptions import (
 )
 
 
-DEFAULT = object()
-
-
 class TinkoffInvestmentsRESTClient(BaseHTTPClient):
     def __init__(
             self,
             token: str,
             environment: Environment = Environment.PRODUCTION,
             timeout: Optional[float] = 5,
-            rate_limit: Optional[RateLimiter] = DEFAULT,  # type: ignore
             wait_on_rate_limit: bool = True,
     ):
 
@@ -44,18 +40,13 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
         self.market = MarketAPI(self)
         self.operations = OperationsAPI(self)
         self.user = UserAPI(self)
-        self.rate_limit: Optional[RateLimiter]
-        if rate_limit is DEFAULT:
-            self.rate_limit = RateLimiter(rate=120, period=60)
-        else:
-            self.rate_limit = rate_limit
         self.wait_on_rate_limit = wait_on_rate_limit
 
-    async def _request(self, method, path, **kwargs):
-        # type: (str, str, Any) -> Dict[Any, Any]
+    async def _request(self, method, path, rate_limit=None, **kwargs):
+        # type: (str, str, Optional[RateLimiter], Any) -> Dict[Any, Any]
         try:
-            if self.rate_limit:
-                await self.rate_limit.acquire(self.wait_on_rate_limit)
+            if rate_limit:
+                await rate_limit.acquire(self.wait_on_rate_limit)
             response = await self._session.request(
                 method=method,
                 url=self._base_url / path.lstrip('/'),

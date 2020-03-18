@@ -17,18 +17,6 @@ from tinkoff.investments.model.market.instruments import (
 )
 
 
-# class _MarketInstrumentListAPI(BaseAPI):
-#     __path__ = None
-#
-#     async def get(self) -> List[MarketInstrument]:
-#         payload = await self._request(
-#             method='GET',
-#             path=self.__path__,
-#         )
-#         return [MarketInstrument.from_dict(obj)
-#                 for obj in payload['instruments']]
-
-
 class MarketInstrumentsAPI(BaseTinkoffInvestmentsAPI):
     async def search(
             self,

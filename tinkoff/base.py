@@ -19,7 +19,7 @@ class BaseHTTPClient:
 
     @property
     def _session(self):
-        if not self.__session:
+        if not self.__session or self.__session.closed:
             self.__session = aiohttp.ClientSession(
                 headers=self.__headers,
                 timeout=aiohttp.ClientTimeout(total=self.__timeout)

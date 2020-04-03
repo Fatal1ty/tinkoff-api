@@ -10,6 +10,7 @@
 
 Table of contens
 --------------------------------------------------------------------------------
+* [Features](#features)
 * [Installation](#installation)
 * [Usage examples](#usage-examples)
     * [REST API client](#rest-api-client)
@@ -17,6 +18,15 @@ Table of contens
     * [Dynamic subscriptions in runtime](#dynamic-subscriptions-in-runtime)
     * [Complete simple bot](#complete-simple-bot)
 * [TODO](#todo)
+
+
+Features
+--------------------------------------------------------------------------------
+* Clients for both [REST](https://tinkoffcreditsystems.github.io/invest-openapi/rest/) and [Streaming](https://tinkoffcreditsystems.github.io/invest-openapi/marketdata/) protocols
+* Presence of data classes for all interaction with API
+* Automatic reconnection and keep-alive connections
+* Internal exclusive rate limiter for every resource in REST protocol
+* Friendly exceptions for API errors
 
 
 Installation

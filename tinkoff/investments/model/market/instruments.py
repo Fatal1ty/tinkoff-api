@@ -6,6 +6,7 @@ from tinkoff.investments.model.base import (
     Currency,
     FigiName,
     TickerName,
+    InstrumentType,
 )
 
 
@@ -15,6 +16,7 @@ class MarketInstrument(BaseModel):
     ticker: TickerName
     lot: int
     name: str
+    type: InstrumentType
     currency: Optional[Currency] = None
     isin: Optional[str] = None
     minPriceIncrement: Optional[float] = None

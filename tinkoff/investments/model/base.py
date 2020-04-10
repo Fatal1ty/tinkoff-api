@@ -31,6 +31,12 @@ class Currency(Enum):
     RUB = 'RUB'
     USD = 'USD'
     EUS = 'EUR'
+    GBP = 'GBP'
+    HKD = 'HKD'
+    CHF = 'CHF'
+    JPY = 'JPY'
+    CNY = 'CNY'
+    TRY = 'TRY'
 
 
 class InstrumentType(Enum):

@@ -72,7 +72,7 @@ async def jackpot():
                 token='TOKEN',
                 environment=Environment.SANDBOX) as client:
 
-            instruments = await client.market.instruments.search(ticker='AAPL')
+            instruments = await client.market.instruments.search('AAPL')
             apple = instruments[0]
 
             account = await client.sandbox.accounts.register()

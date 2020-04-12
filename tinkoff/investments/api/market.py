@@ -3,7 +3,10 @@ from typing import Optional, List, Any
 
 from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
 
-from tinkoff.investments.client.exceptions import TinkoffInvestmentsUsageError
+from tinkoff.investments.client.exceptions import (
+    TinkoffInvestmentsUsageError,
+    TinkoffInvestmentsAPIError,
+)
 from tinkoff.investments.model.base import FigiName, TickerName
 from tinkoff.investments.model.market.orderbook import OrderBook
 from tinkoff.investments.model.market.candles import (
@@ -18,24 +21,25 @@ from tinkoff.investments.model.market.instruments import (
 
 
 class MarketInstrumentsAPI(BaseTinkoffInvestmentsAPI):
-    async def search(
-            self,
-            figi: Optional[FigiName] = None,
-            ticker: Optional[TickerName] = None
-    ) -> List[MarketInstrument]:
-
-        if figi:
-            search_method = 'by-figi'
-            params = {'figi': figi}
-        elif ticker:
-            search_method = 'by-ticker'
-            params = {'ticker': ticker}
-        else:
-            raise TinkoffInvestmentsUsageError('Expected either figi or ticker')
+    async def search(self, ticker: TickerName) -> List[MarketInstrument]:
         return await self.__get_instruments(
-            path=f'/market/search/{search_method}',
-            **params
+            path='/market/search/by-ticker',
+            ticker=ticker,
         )
+
+    async def get(self, figi: FigiName) -> Optional[MarketInstrument]:
+        try:
+            payload = await self._request(
+                method='GET',
+                path='/market/search/by-figi',
+                params={'figi': figi},
+            )
+            return MarketInstrument.from_dict(payload)
+        except TinkoffInvestmentsAPIError as e:
+            if e.error.code == 'NOT_FOUND':
+                return None
+            else:
+                raise e from None
 
     async def get_stocks(self) -> List[MarketInstrument]:
         return await self.__get_instruments('/market/stocks')

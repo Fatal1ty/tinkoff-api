@@ -10,6 +10,7 @@
 
 Table of contens
 --------------------------------------------------------------------------------
+* [Covered APIs](#covered-apis)
 * [Features](#features)
 * [Installation](#installation)
 * [Usage examples](#usage-examples)
@@ -20,9 +21,14 @@ Table of contens
 * [TODO](#todo)
 
 
+Covered APIs
+--------------------------------------------------------------------------------
+* Tinkoff Investments ([official docs](https://tinkoffcreditsystems.github.io/invest-openapi/))
+
+
 Features
 --------------------------------------------------------------------------------
-* Clients for both [REST](https://tinkoffcreditsystems.github.io/invest-openapi/rest/) and [Streaming](https://tinkoffcreditsystems.github.io/invest-openapi/marketdata/) protocols
+* Clients for both [REST](https://tinkoffcreditsystems.github.io/invest-openapi/rest/) and [Streaming](https://tinkoffcreditsystems.github.io/invest-openapi/marketdata/) protocols in Tinkoff Investments
 * Presence of data classes for all interaction with API
 * Automatic reconnection and keep-alive connections
 * Internal exclusive rate limiter for every resource in REST protocol

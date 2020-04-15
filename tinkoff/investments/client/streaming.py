@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from datetime import datetime
 from typing import Any, Dict, Type, Optional, Callable, List
 
 from aiohttp import ClientWebSocketResponse, WSMsgType, ClientConnectionError
@@ -44,10 +45,10 @@ class BaseEventStream:
         self._subscribers.pop(key, None)
         await self._client.request(key.unsubscribe_key())
 
-    async def publish(self, event: BaseEvent):
+    async def publish(self, event: BaseEvent, server_time: datetime):
         callback = self._subscribers.get(event.key())  # TODO: сделать иначе
         if callback:
-            await callback(event)
+            await callback(event, server_time)
 
 
 class CandleEventStream(BaseEventStream):
@@ -79,8 +80,8 @@ class EventsBroker:
         self.orderbooks._client = client
         self.instrument_info._client = client
 
-    async def publish(self, event: BaseEvent):
-        await self._routes[event.event_name].publish(event)
+    async def publish(self, event: BaseEvent, server_time: datetime):
+        await self._routes[event.event_name].publish(event, server_time)
 
 
 class TinkoffInvestmentsStreamingClient(BaseHTTPClient):
@@ -135,7 +136,10 @@ class TinkoffInvestmentsStreamingClient(BaseHTTPClient):
                 # noinspection PyUnresolvedReferences
                 msg = StreamingMessage.from_json(msg.data)
                 try:
-                    await self.events.publish(msg.parsed_payload)
+                    await self.events.publish(
+                        event=msg.parsed_payload,
+                        server_time=msg.time,
+                    )
                 except Exception as e:
                     logger.exception(
                         'Unhandled exception in streaming event handler: %s', e

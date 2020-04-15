@@ -101,6 +101,7 @@ asyncio.run(jackpot())
 #### Streaming Client:
 ```python
 import asyncio
+from datetime import datetime
 from tinkoff.investments import (
     TinkoffInvestmentsStreamingClient, CandleEvent, CandleResolution
 )
@@ -109,8 +110,8 @@ client = TinkoffInvestmentsStreamingClient(token='TOKEN')
 
 @client.events.candles('BBG009S39JX6', CandleResolution.MIN_1)
 @client.events.candles('BBG000B9XRY4', CandleResolution.MIN_1)
-async def on_candle(candle: CandleEvent):
-    print(candle)
+async def on_candle(candle: CandleEvent, server_time: datetime):
+    print(candle, server_time)
 
 asyncio.run(client.run())
 ```
@@ -118,6 +119,7 @@ asyncio.run(client.run())
 #### Dynamic subscriptions in runtime:
 ```python
 import asyncio
+from datetime import datetime
 from tinkoff.investments import (
     TinkoffInvestmentsStreamingClient, CandleEvent, CandleResolution
 )
@@ -125,7 +127,7 @@ from tinkoff.investments import (
 client = TinkoffInvestmentsStreamingClient(token='TOKEN')
 
 @client.events.candles('BBG000B9XRY4', CandleResolution.HOUR)
-async def on_candle(candle: CandleEvent):
+async def on_candle(candle: CandleEvent, server_time: datetime):
     if candle.h > 1000:
         await client.events.candles.subscribe(
             callback=on_candle,
@@ -143,6 +145,7 @@ asyncio.run(client.run())
 #### Complete simple bot:
 ```python
 import asyncio
+from datetime import datetime
 from tinkoff.investments import (
     TinkoffInvestmentsStreamingClient, TinkoffInvestmentsRESTClient,
     CandleEvent, CandleResolution, OperationType
@@ -152,7 +155,7 @@ streaming = TinkoffInvestmentsStreamingClient('TOKEN')
 rest = TinkoffInvestmentsRESTClient('TOKEN')
 
 @streaming.events.candles('BBG000B9XRY4', CandleResolution.MIN_1)
-async def buy_apple(candle: CandleEvent):
+async def buy_apple(candle: CandleEvent, server_time: datetime):
     if candle.c > 350:
         await rest.orders.create_market_order(
             figi='BBG000B9XRY4',

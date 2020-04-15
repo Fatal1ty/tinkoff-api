@@ -142,6 +142,7 @@ class ErrorEvent(BaseEvent):
 @dataclass
 class StreamingMessage(DataClassJSONMixin):
     event: EventName
+    time: ISODateTime
     payload: Dict[Any, Any]
 
     @property

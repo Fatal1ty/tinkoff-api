@@ -1,6 +1,8 @@
 import asyncio
 from typing import Any, Dict, Optional
 
+from aiohttp import ClientResponseError
+
 from tinkoff.base import BaseHTTPClient, RateLimiter, RateLimitReached
 from tinkoff.investments.api import (
     SandboxAPI,
@@ -15,6 +17,7 @@ from tinkoff.investments.client.exceptions import (
     TinkoffInvestmentsUnauthorizedError,
     TinkoffInvestmentsTooManyRequestsError,
     TinkoffInvestmentsTimeoutError,
+    TinkoffInvestmentsUnavailableError,
 )
 
 
@@ -47,18 +50,23 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
         try:
             if rate_limit:
                 await rate_limit.acquire(self.wait_on_rate_limit)
-            response = await self._session.request(
-                method=method,
-                url=self._base_url / path.lstrip('/'),
-                **kwargs
-            )
-            if response.status == 401:
-                raise TinkoffInvestmentsUnauthorizedError
-            elif response.status == 429:
-                raise TinkoffInvestmentsTooManyRequestsError
-            else:
-                # TODO: ловить другие исключения, если в ответе не json
+            try:
+                response = await self._session.request(
+                    method=method,
+                    url=self._base_url / path.lstrip('/'),
+                    raise_for_status=True,
+                    **kwargs
+                )
                 return await response.json()
+            except ClientResponseError as e:
+                if e.status >= 500:
+                    raise TinkoffInvestmentsUnavailableError from None
+                elif e.status == 401:
+                    raise TinkoffInvestmentsUnauthorizedError from None
+                elif e.status == 429:
+                    raise TinkoffInvestmentsTooManyRequestsError from None
+                else:
+                    raise
         except asyncio.TimeoutError:
             raise TinkoffInvestmentsTimeoutError from None
         except RateLimitReached:

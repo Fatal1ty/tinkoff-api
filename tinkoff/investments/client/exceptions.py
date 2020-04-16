@@ -24,6 +24,10 @@ class TinkoffInvestmentsTimeoutError(TinkoffInvestmentsError, TimeoutError):
     pass
 
 
+class TinkoffInvestmentsUnavailableError(TinkoffInvestmentsError):
+    pass
+
+
 class TinkoffInvestmentsAPIError(TinkoffInvestmentsError):
     def __init__(self, tracking_id: str, status: Status, error: Error):
         self.trackingId = tracking_id
@@ -41,4 +45,5 @@ __all__ = [
     'TinkoffInvestmentsUnauthorizedError',
     'TinkoffInvestmentsTooManyRequestsError',
     'TinkoffInvestmentsTimeoutError',
+    'TinkoffInvestmentsUnavailableError',
 ]

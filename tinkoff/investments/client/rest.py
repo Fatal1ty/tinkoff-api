@@ -1,7 +1,7 @@
 import asyncio
 from typing import Any, Dict, Optional
 
-from aiohttp import ClientResponseError
+from aiohttp import ClientResponseError, ClientConnectionError
 
 from tinkoff.base import BaseHTTPClient, RateLimiter, RateLimitReached
 from tinkoff.investments.api import (
@@ -18,6 +18,7 @@ from tinkoff.investments.client.exceptions import (
     TinkoffInvestmentsTooManyRequestsError,
     TinkoffInvestmentsTimeoutError,
     TinkoffInvestmentsUnavailableError,
+    TinkoffInvestmentsConnectionError,
 )
 
 
@@ -71,6 +72,8 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
             raise TinkoffInvestmentsTimeoutError from None
         except RateLimitReached:
             raise TinkoffInvestmentsTooManyRequestsError from None
+        except ClientConnectionError as e:
+            raise TinkoffInvestmentsConnectionError(str(e)) from None
 
     async def __aenter__(self):
         return self

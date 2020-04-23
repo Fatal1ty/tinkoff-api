@@ -3,7 +3,7 @@ import logging
 from datetime import datetime
 from typing import Any, Dict, Type, Optional, Callable, List
 
-from aiohttp import ClientWebSocketResponse, WSMsgType, ClientConnectionError
+from aiohttp import ClientWebSocketResponse, WSMsgType, ClientError
 
 from tinkoff.base import BaseHTTPClient
 from tinkoff.investments.client.environments import Environment, EnvironmentURL
@@ -125,7 +125,7 @@ class TinkoffInvestmentsStreamingClient(BaseHTTPClient):
                     await self._run(ws)
             except asyncio.TimeoutError:
                 await asyncio.sleep(self._reconnect_timeout)
-            except ClientConnectionError:
+            except ClientError:
                 await asyncio.sleep(self._reconnect_timeout)
 
     async def _run(self, ws: ClientWebSocketResponse):

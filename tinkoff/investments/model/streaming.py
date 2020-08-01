@@ -44,7 +44,7 @@ class OrderBookEventKey(BaseEventKey):
 
 
 @dataclass(unsafe_hash=True)
-class InstrumentInfoKey(BaseEventKey):
+class InstrumentInfoEventKey(BaseEventKey):
     event_name = EventName.INSTRUMENT_INFO
     figi: FigiName
 
@@ -161,5 +161,5 @@ EventMapping = {
 EventKeyMapping = {
     EventName.CANDLE: CandleEventKey,
     EventName.ORDERBOOK: OrderBookEventKey,
-    EventName.INSTRUMENT_INFO: InstrumentInfoKey,
+    EventName.INSTRUMENT_INFO: InstrumentInfoEventKey
 }

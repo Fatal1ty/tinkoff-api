@@ -17,4 +17,6 @@ from .model.operations import (
 from .model.portfolio import PortfolioPosition, CurrencyPosition
 from .model.user.accounts import BrokerAccountID, BrokerAccountType, UserAccount
 from .model.sandbox import SandboxAccount
-from .model.streaming import CandleEvent, OrderBookEvent, InstrumentInfoEvent
+from .model.streaming import (
+    CandleEvent, OrderBookEvent, InstrumentInfoEvent, ErrorEvent
+)

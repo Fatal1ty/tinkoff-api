@@ -12,6 +12,7 @@ from tinkoff.investments.model.streaming import (
     CandleEvent,
     OrderBookEvent,
     InstrumentInfoEvent,
+    ErrorEvent,
     BaseEventKey,
     StreamingMessage,
     EventName,
@@ -63,22 +64,29 @@ class InstrumentInfoEventStream(BaseEventStream):
     EVENT_TYPE = InstrumentInfoEvent
 
 
+class ErrorEventStream(BaseEventStream):
+    EVENT_TYPE = ErrorEvent
+
+
 class EventsBroker:
     def __init__(self):
         self.candles = CandleEventStream()
         self.orderbooks = OrderBookEventStream()
         self.instrument_info = InstrumentInfoEventStream()
+        self.errors = ErrorEventStream()
 
         self._routes = {
             EventName.CANDLE: self.candles,
             EventName.ORDERBOOK: self.orderbooks,
             EventName.INSTRUMENT_INFO: self.instrument_info,
+            EventName.ERROR: self.errors,
         }
 
     def add_publisher(self, client: 'TinkoffInvestmentsStreamingClient'):
         self.candles._client = client
         self.orderbooks._client = client
         self.instrument_info._client = client
+        self.errors._client = client
 
     async def publish(self, event: BaseEvent, server_time: datetime):
         await self._routes[event.event_name].publish(event, server_time)

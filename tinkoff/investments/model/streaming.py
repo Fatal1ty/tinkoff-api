@@ -49,6 +49,11 @@ class InstrumentInfoEventKey(BaseEventKey):
     figi: FigiName
 
 
+@dataclass(unsafe_hash=True)
+class ErrorEventKey(BaseEventKey):
+    event_name = EventName.ERROR
+
+
 ConcreteEventKey = TypeVar('ConcreteEventKey', bound=BaseEventKey)
 
 
@@ -136,7 +141,7 @@ class ErrorEvent(BaseEvent):
     request_id: Optional[str] = None
 
     def key(self):
-        raise NotImplementedError
+        return self.key_type()
 
 
 @dataclass
@@ -161,5 +166,6 @@ EventMapping = {
 EventKeyMapping = {
     EventName.CANDLE: CandleEventKey,
     EventName.ORDERBOOK: OrderBookEventKey,
-    EventName.INSTRUMENT_INFO: InstrumentInfoEventKey
+    EventName.INSTRUMENT_INFO: InstrumentInfoEventKey,
+    EventName.ERROR: ErrorEventKey
 }

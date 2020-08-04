@@ -74,6 +74,7 @@ class Operation(BaseModel):
     figi: Optional[FigiName] = None
     instrumentType: Optional[InstrumentType] = None
     operationType: Optional[OperationTypeWithCommission] = None
+    quantityExecuted: Optional[int] = None
 
 
 @dataclass

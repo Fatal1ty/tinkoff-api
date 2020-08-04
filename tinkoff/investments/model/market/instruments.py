@@ -20,6 +20,7 @@ class MarketInstrument(BaseModel):
     currency: Optional[Currency] = None
     isin: Optional[str] = None
     minPriceIncrement: Optional[float] = None
+    minQuantity: Optional[int] = None
 
 
 @dataclass

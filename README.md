@@ -18,6 +18,7 @@ Table of contens
     * [Streaming client](#streaming-client)
     * [Dynamic subscriptions in runtime](#dynamic-subscriptions-in-runtime)
     * [Complete simple bot](#complete-simple-bot)
+    * [Historical data](#historical-data)
 * [TODO](#todo)
 
 
@@ -166,6 +167,25 @@ async def buy_apple(candle: CandleEvent, server_time: datetime):
 
 asyncio.run(streaming.run())
 
+```
+
+#### Historical data:
+```python
+from tinkoff_bot.service.historical_data import (
+    CandleResolution, TinkoffInvestmentsRESTClient
+)
+async def get_minute_candles():
+    # show 1 minute candles for AAPL in 10 years period of time
+    client = TinkoffInvestmentsRESTClient(token='***')
+    historical_data = HistoricalData(client)
+    async for candle in historical_data.iter_candles(
+        figi='BBG000B9XRY4',
+        dt_from=datetime(2010, 1, 1),
+        dt_to=datetime(2020, 1, 1),
+        interval=CandleResolution.MIN_1,
+    ):
+        print(candle)
+asyncio.run(get_minute_candles())
 ```
 
 TODO

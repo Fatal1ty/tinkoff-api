@@ -29,6 +29,7 @@ class BaseHTTPClient:
     async def close(self):
         self._closed = True
         await self._session.close()
+        self.__session = None
 
     @property
     def closed(self):

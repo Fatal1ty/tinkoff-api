@@ -1,5 +1,6 @@
 from typing import List
 
+from tinkoff.base import RateLimiter
 from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
 from tinkoff.investments.model.user.accounts import BrokerAccountID
 from tinkoff.investments.model.orders import (
@@ -15,6 +16,9 @@ from tinkoff.investments.model.base import FigiName
 
 
 class OrdersAPI(BaseTinkoffInvestmentsAPI):
+    def _get_rate_limiter(self) -> RateLimiter:
+        return RateLimiter(rate=30, period=60)
+
     async def get(self, broker_account_id=None):
         # type: (BrokerAccountID) -> List[Order]
 

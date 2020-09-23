@@ -9,7 +9,10 @@ from tinkoff.investments.client.exceptions import TinkoffInvestmentsAPIError
 class BaseTinkoffInvestmentsAPI:
     def __init__(self, client):
         self._client = client
-        self._rate_limit = RateLimiter(rate=120, period=60)
+        self._rate_limit = self._get_rate_limiter()
+
+    def _get_rate_limiter(self) -> RateLimiter:
+        return RateLimiter(rate=120, period=60)
 
     async def _request(self, method, path, **kwargs):
         # type: (str, str, Any) -> Union[Dict[Any, Any], List[Any]]

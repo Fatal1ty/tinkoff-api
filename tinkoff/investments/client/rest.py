@@ -60,7 +60,7 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
                 raise TinkoffInvestmentsUnauthorizedError
             elif response.status == 429:
                 raise TinkoffInvestmentsTooManyRequestsError
-            elif response.status == 503:
+            elif response.status >= 500:
                 raise TinkoffInvestmentsUnavailableError
             else:
                 # TODO: ловить другие исключения, если в ответе не json

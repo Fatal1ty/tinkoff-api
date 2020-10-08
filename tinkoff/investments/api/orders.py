@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 
 from tinkoff.base import RateLimiter
 from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
@@ -16,8 +16,16 @@ from tinkoff.investments.model.base import FigiName
 
 
 class OrdersAPI(BaseTinkoffInvestmentsAPI):
-    def _get_rate_limiter(self) -> RateLimiter:
-        return RateLimiter(rate=30, period=60)
+    def _get_default_rate_limiter(self) -> RateLimiter:
+        return RateLimiter(rate=10, period=60)
+
+    def _get_path_rate_limiters(self) -> Dict[str, RateLimiter]:
+        return {
+            '/orders': RateLimiter(rate=100, period=60),
+            '/orders/limit-order': RateLimiter(rate=10, period=60),
+            '/orders/market-order': RateLimiter(rate=10, period=60),
+            '/orders/cancel': RateLimiter(rate=10, period=60),
+        }
 
     async def get(self, broker_account_id=None):
         # type: (BrokerAccountID) -> List[Order]

@@ -22,9 +22,9 @@ class OrdersAPI(BaseTinkoffInvestmentsAPI):
     def _get_path_rate_limiters(self) -> Dict[str, RateLimiter]:
         return {
             '/orders': RateLimiter(rate=100, period=60),
-            '/orders/limit-order': RateLimiter(rate=10, period=60),
-            '/orders/market-order': RateLimiter(rate=10, period=60),
-            '/orders/cancel': RateLimiter(rate=10, period=60),
+            '/orders/limit-order': RateLimiter(rate=50, period=60),
+            '/orders/market-order': RateLimiter(rate=50, period=60),
+            '/orders/cancel': RateLimiter(rate=50, period=60),
         }
 
     async def get(self, broker_account_id=None):

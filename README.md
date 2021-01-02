@@ -173,20 +173,24 @@ asyncio.run(streaming.run())
 ```python
 import asyncio
 from datetime import datetime
-from tinkoff.investments import CandleResolution, TinkoffInvestmentsRESTClient
+from tinkoff.investments import (
+    CandleResolution, TinkoffInvestmentsRESTClient, Environment
+)
 from tinkoff.investments.utils.historical_data import HistoricalData
 
 async def get_minute_candles():
-    # show 1 minute candles for AAPL in 10 years period of time
-    client = TinkoffInvestmentsRESTClient(token='***')
-    historical_data = HistoricalData(client)
-    async for candle in historical_data.iter_candles(
-        figi='BBG000B9XRY4',
-        dt_from=datetime(2010, 1, 1),
-        dt_to=datetime(2020, 1, 1),
-        interval=CandleResolution.MIN_1,
-    ):
-        print(candle)
+    # show 1 minute candles for AAPL in 1 year period of time
+    async with TinkoffInvestmentsRESTClient(
+        token='TOKEN', environment=Environment.SANDBOX
+    ) as client:
+        historical_data = HistoricalData(client)
+        async for candle in historical_data.iter_candles(
+            figi='BBG000B9XRY4',
+            dt_from=datetime(2019, 1, 1),
+            dt_to=datetime(2020, 1, 1),
+            interval=CandleResolution.MIN_1,
+        ):
+            print(candle)
 
 asyncio.run(get_minute_candles())
 ```

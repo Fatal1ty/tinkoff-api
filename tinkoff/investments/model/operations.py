@@ -66,7 +66,7 @@ class Operation(BaseModel):
     currency: Currency
     payment: float
     isMarginCall: bool
-    date: datetime
+    date: datetime = field(metadata={'deserialize': 'ciso8601'})
     trades: Optional[List[OperationTrade]] = None
     commission: Optional[MoneyAmount] = None
     price: Optional[float] = None

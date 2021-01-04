@@ -1,8 +1,9 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import datetime
 from typing import List
 from enum import Enum
 
-from tinkoff.investments.model.base import BaseModel, ISODateTime, FigiName
+from tinkoff.investments.model.base import BaseModel, FigiName
 
 
 class CandleResolution(Enum):
@@ -29,7 +30,7 @@ class Candle(BaseModel):
     h: float
     l: float
     v: int
-    time: ISODateTime
+    time: datetime = field(metadata={'deserialize': 'ciso8601'})
 
 
 @dataclass

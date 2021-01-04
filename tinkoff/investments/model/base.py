@@ -50,17 +50,3 @@ class InstrumentType(Enum):
 class MoneyAmount(BaseModel):
     currency: Currency
     value: float
-
-
-class ISODateTime(datetime, SerializableType):
-
-    def _serialize(self):
-        return self.isoformat()
-
-    @classmethod
-    def _deserialize(cls, value):
-        dt = ciso8601.parse_datetime(value)
-        return cls(
-            dt.year, dt.month, dt.day, dt.hour, dt.minute,
-            dt.second, dt.microsecond, dt.tzinfo
-        )

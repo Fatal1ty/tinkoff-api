@@ -1,11 +1,12 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from typing import Dict, List, Optional, ClassVar, Type, TypeVar, Any
 
 from mashumaro import DataClassJSONMixin
 
 from tinkoff.base import classproperty
-from tinkoff.investments.model.base import BaseModel, FigiName, ISODateTime
+from tinkoff.investments.model.base import BaseModel, FigiName
 from tinkoff.investments.model.market.candles import Candle, CandleResolution
 from tinkoff.investments.model.market.orderbook import OrderBook
 
@@ -72,7 +73,7 @@ class BaseEvent(BaseModel):
 class CandleEvent(BaseEvent):
     event_name = EventName.CANDLE
     figi: FigiName
-    time: ISODateTime
+    time: datetime = field(metadata={'deserialize': 'ciso8601'})
     interval: CandleResolution
     o: float
     c: float
@@ -147,7 +148,7 @@ class ErrorEvent(BaseEvent):
 @dataclass
 class StreamingMessage(DataClassJSONMixin):
     event: EventName
-    time: ISODateTime
+    time: datetime = field(metadata={'deserialize': 'ciso8601'})
     payload: Dict[Any, Any]
 
     @property

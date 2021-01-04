@@ -1,10 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from typing import List, Optional
 
 from tinkoff.investments.model.base import (
     BaseModel,
-    ISODateTime,
     MoneyAmount,
     Currency,
     FigiName,
@@ -54,7 +54,7 @@ class OperationTypeWithCommission(Enum):
 @dataclass
 class OperationTrade(BaseModel):
     tradeId: TradeID
-    date: ISODateTime
+    date: datetime = field(metadata={'deserialize': 'ciso8601'})
     price: float
     quantity: int
 
@@ -66,7 +66,7 @@ class Operation(BaseModel):
     currency: Currency
     payment: float
     isMarginCall: bool
-    date: ISODateTime
+    date: datetime
     trades: Optional[List[OperationTrade]] = None
     commission: Optional[MoneyAmount] = None
     price: Optional[float] = None

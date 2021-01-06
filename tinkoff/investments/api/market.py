@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Optional, List, Any
 
 from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
@@ -15,6 +15,7 @@ from tinkoff.investments.model.market.instruments import (
     MarketInstrument,
     MarketInstrumentList,
 )
+from tinkoff.investments.utils import offset_aware_datetime
 
 
 class MarketInstrumentsAPI(BaseTinkoffInvestmentsAPI):
@@ -76,10 +77,8 @@ class MarketOrderBooksAPI(BaseTinkoffInvestmentsAPI):
 class MarketCandlesAPI(BaseTinkoffInvestmentsAPI):
     async def get(self, figi, dt_from, dt_to, interval):
         # type: (FigiName, datetime, datetime, CandleResolution) -> List[Candle]
-        if not dt_from.tzinfo:
-            dt_from = dt_from.replace(tzinfo=timezone.utc)
-        if not dt_to.tzinfo:
-            dt_to = dt_to.replace(tzinfo=timezone.utc)
+        dt_from = offset_aware_datetime(dt_from)
+        dt_to = offset_aware_datetime(dt_to)
         payload = await self._request(
             method='GET',
             path='/market/candles',

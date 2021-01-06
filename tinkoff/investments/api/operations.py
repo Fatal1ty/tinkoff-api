@@ -1,10 +1,11 @@
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import List
 
 from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
 from tinkoff.investments.model.base import FigiName
 from tinkoff.investments.model.user.accounts import BrokerAccountID
 from tinkoff.investments.model.operations import Operation, Operations
+from tinkoff.investments.utils import offset_aware_datetime
 
 
 class OperationsAPI(BaseTinkoffInvestmentsAPI):
@@ -16,10 +17,8 @@ class OperationsAPI(BaseTinkoffInvestmentsAPI):
             broker_account_id: BrokerAccountID = None
     ) -> List[Operation]:
 
-        if not dt_from.tzinfo:
-            dt_from = dt_from.replace(tzinfo=timezone.utc)
-        if not dt_to.tzinfo:
-            dt_to = dt_to.replace(tzinfo=timezone.utc)
+        dt_from = offset_aware_datetime(dt_from)
+        dt_to = offset_aware_datetime(dt_to)
         params = {
             'from': dt_from.isoformat(),
             'to': dt_to.isoformat(),

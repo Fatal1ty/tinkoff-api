@@ -59,6 +59,7 @@ from tinkoff.investments import (
 )
 from tinkoff.investments.client.exceptions import TinkoffInvestmentsError
 
+
 async def show_apple_year_candles():
     try:
         async with TinkoffInvestmentsRESTClient(
@@ -75,6 +76,7 @@ async def show_apple_year_candles():
                 print(f"{candle.time}: {candle.h}")
     except TinkoffInvestmentsError as e:
         print(e)
+
 
 async def jackpot():
     try:
@@ -99,6 +101,7 @@ async def jackpot():
     except TinkoffInvestmentsError as e:
         print(e)
 
+
 asyncio.run(jackpot())
 ```
 
@@ -107,17 +110,19 @@ asyncio.run(jackpot())
 import asyncio
 from datetime import datetime
 from tinkoff.investments import (
-    TinkoffInvestmentsStreamingClient,
     CandleEvent,
     CandleResolution,
+    TinkoffInvestmentsStreamingClient,
 )
 
 client = TinkoffInvestmentsStreamingClient(token="TOKEN")
+
 
 @client.events.candles("BBG009S39JX6", CandleResolution.MIN_1)
 @client.events.candles("BBG000B9XRY4", CandleResolution.MIN_1)
 async def on_candle(candle: CandleEvent, server_time: datetime):
     print(candle, server_time)
+
 
 asyncio.run(client.run())
 ```
@@ -127,12 +132,13 @@ asyncio.run(client.run())
 import asyncio
 from datetime import datetime
 from tinkoff.investments import (
-    TinkoffInvestmentsStreamingClient,
     CandleEvent,
     CandleResolution,
+    TinkoffInvestmentsStreamingClient,
 )
 
 client = TinkoffInvestmentsStreamingClient(token="TOKEN")
+
 
 @client.events.candles("BBG000B9XRY4", CandleResolution.HOUR)
 async def on_candle(candle: CandleEvent, server_time: datetime):
@@ -147,6 +153,7 @@ async def on_candle(candle: CandleEvent, server_time: datetime):
             candle.figi, CandleResolution.MIN_1
         )
 
+
 asyncio.run(client.run())
 ```
 
@@ -154,16 +161,18 @@ asyncio.run(client.run())
 ```python
 import asyncio
 from datetime import datetime
+
 from tinkoff.investments import (
-    TinkoffInvestmentsStreamingClient,
-    TinkoffInvestmentsRESTClient,
     CandleEvent,
     CandleResolution,
     OperationType,
+    TinkoffInvestmentsRESTClient,
+    TinkoffInvestmentsStreamingClient,
 )
 
 streaming = TinkoffInvestmentsStreamingClient("TOKEN")
 rest = TinkoffInvestmentsRESTClient("TOKEN")
+
 
 @streaming.events.candles("BBG000B9XRY4", CandleResolution.MIN_1)
 async def buy_apple(candle: CandleEvent, server_time: datetime):
@@ -175,6 +184,7 @@ async def buy_apple(candle: CandleEvent, server_time: datetime):
             broker_account_id=123,
         )
 
+
 asyncio.run(streaming.run())
 ```
 
@@ -182,12 +192,14 @@ asyncio.run(streaming.run())
 ```python
 import asyncio
 from datetime import datetime
+
 from tinkoff.investments import (
     CandleResolution,
-    TinkoffInvestmentsRESTClient,
     Environment,
+    TinkoffInvestmentsRESTClient,
 )
 from tinkoff.investments.utils.historical_data import HistoricalData
+
 
 async def get_minute_candles():
     # show 1 minute candles for AAPL in 1 year period of time
@@ -203,8 +215,8 @@ async def get_minute_candles():
         ):
             print(candle)
 
-asyncio.run(get_minute_candles())
 
+asyncio.run(get_minute_candles())
 ```
 
 TODO

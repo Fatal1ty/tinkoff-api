@@ -1,9 +1,8 @@
+from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
-from dataclasses import dataclass
 
 from mashumaro import DataClassJSONMixin
-
 
 FigiName = str
 TickerName = str
@@ -20,27 +19,27 @@ class Error(BaseModel):
 
 
 class Status(Enum):
-    OK = 'Ok'
-    ERROR = 'Error'
+    OK = "Ok"
+    ERROR = "Error"
 
 
 class Currency(Enum):
-    RUB = 'RUB'
-    USD = 'USD'
-    EUS = 'EUR'
-    GBP = 'GBP'
-    HKD = 'HKD'
-    CHF = 'CHF'
-    JPY = 'JPY'
-    CNY = 'CNY'
-    TRY = 'TRY'
+    RUB = "RUB"
+    USD = "USD"
+    EUS = "EUR"
+    GBP = "GBP"
+    HKD = "HKD"
+    CHF = "CHF"
+    JPY = "JPY"
+    CNY = "CNY"
+    TRY = "TRY"
 
 
 class InstrumentType(Enum):
-    STOCK = 'Stock'
-    CURRENCY = 'Currency'
-    BOND = 'Bond'
-    ETF = 'Etf'
+    STOCK = "Stock"
+    CURRENCY = "Currency"
+    BOND = "Bond"
+    ETF = "Etf"
 
 
 @dataclass

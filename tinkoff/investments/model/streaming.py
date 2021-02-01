@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Optional, ClassVar, Type, TypeVar, Any
+from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar
 
 from mashumaro import DataClassJSONMixin
 
@@ -12,22 +12,26 @@ from tinkoff.investments.model.market.orderbook import OrderBook
 
 
 class EventName(Enum):
-    CANDLE = 'candle'
-    ORDERBOOK = 'orderbook'
-    INSTRUMENT_INFO = 'instrument_info'
-    ERROR = 'error'
+    CANDLE = "candle"
+    ORDERBOOK = "orderbook"
+    INSTRUMENT_INFO = "instrument_info"
+    ERROR = "error"
 
 
 class BaseEventKey(DataClassJSONMixin):
     event_name: ClassVar[EventName]
 
     def subscribe_key(self) -> Dict[str, Any]:
-        return {'event': f'{self.event_name.value}:subscribe',
-                **self.to_dict()}
+        return {
+            "event": f"{self.event_name.value}:subscribe",
+            **self.to_dict(),
+        }
 
     def unsubscribe_key(self) -> Dict[str, Any]:
-        return {'event': f'{self.event_name.value}:unsubscribe',
-                **self.to_dict()}
+        return {
+            "event": f"{self.event_name.value}:unsubscribe",
+            **self.to_dict(),
+        }
 
 
 @dataclass(unsafe_hash=True)
@@ -55,7 +59,7 @@ class ErrorEventKey(BaseEventKey):
     event_name = EventName.ERROR
 
 
-ConcreteEventKey = TypeVar('ConcreteEventKey', bound=BaseEventKey)
+ConcreteEventKey = TypeVar("ConcreteEventKey", bound=BaseEventKey)
 
 
 class BaseEvent(BaseModel):
@@ -73,7 +77,7 @@ class BaseEvent(BaseModel):
 class CandleEvent(BaseEvent):
     event_name = EventName.CANDLE
     figi: FigiName
-    time: datetime = field(metadata={'deserialize': 'ciso8601'})
+    time: datetime = field(metadata={"deserialize": "ciso8601"})
     interval: CandleResolution
     o: float
     c: float
@@ -85,7 +89,7 @@ class CandleEvent(BaseEvent):
         return self.key_type(figi=self.figi, interval=self.interval)
 
     @classmethod
-    def from_candle(cls, candle: Candle) -> 'CandleEvent':
+    def from_candle(cls, candle: Candle) -> "CandleEvent":
         return CandleEvent(
             figi=candle.figi,
             time=candle.time,
@@ -94,7 +98,7 @@ class CandleEvent(BaseEvent):
             c=candle.c,
             h=candle.h,
             l=candle.l,
-            v=candle.v
+            v=candle.v,
         )
 
 
@@ -111,7 +115,7 @@ class OrderBookEvent(BaseEvent):
         return self.key_type(figi=self.figi, depth=self.depth)
 
     @classmethod
-    def from_orderbook(cls, orderbook: OrderBook) -> 'OrderBookEvent':
+    def from_orderbook(cls, orderbook: OrderBook) -> "OrderBookEvent":
         return OrderBookEvent(
             figi=orderbook.figi,
             depth=orderbook.depth,
@@ -148,7 +152,7 @@ class ErrorEvent(BaseEvent):
 @dataclass
 class StreamingMessage(DataClassJSONMixin):
     event: EventName
-    time: datetime = field(metadata={'deserialize': 'ciso8601'})
+    time: datetime = field(metadata={"deserialize": "ciso8601"})
     payload: Dict[Any, Any]
 
     @property
@@ -168,5 +172,5 @@ EventKeyMapping = {
     EventName.CANDLE: CandleEventKey,
     EventName.ORDERBOOK: OrderBookEventKey,
     EventName.INSTRUMENT_INFO: InstrumentInfoEventKey,
-    EventName.ERROR: ErrorEventKey
+    EventName.ERROR: ErrorEventKey,
 }

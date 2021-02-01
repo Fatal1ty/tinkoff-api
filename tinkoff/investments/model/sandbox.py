@@ -31,8 +31,8 @@ class SandboxSetPositionBalanceRequest(BaseModel):
 
 
 __all__ = [
-    'SandboxAccount',
-    'SandboxAccountRegisterRequest',
-    'SandboxSetCurrencyBalanceRequest',
-    'SandboxSetPositionBalanceRequest',
+    "SandboxAccount",
+    "SandboxAccountRegisterRequest",
+    "SandboxSetCurrencyBalanceRequest",
+    "SandboxSetPositionBalanceRequest",
 ]

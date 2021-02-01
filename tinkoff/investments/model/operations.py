@@ -5,56 +5,55 @@ from typing import List, Optional
 
 from tinkoff.investments.model.base import (
     BaseModel,
-    MoneyAmount,
     Currency,
     FigiName,
     InstrumentType,
+    MoneyAmount,
 )
-
 
 OperationID = str
 TradeID = str
 
 
 class OperationStatus(Enum):
-    DONE = 'Done'
-    DECLINE = 'Decline'
-    PROGRESS = 'Progress'
+    DONE = "Done"
+    DECLINE = "Decline"
+    PROGRESS = "Progress"
 
 
 class OperationType(Enum):
-    BUY = 'Buy'
-    SELL = 'Sell'
+    BUY = "Buy"
+    SELL = "Sell"
 
 
 class OperationTypeWithCommission(Enum):
-    BUY = 'Buy'
-    BUY_CARD = 'BuyCard'
-    SELL = 'Sell'
-    BROKER_COMMISSION = 'BrokerCommission'
-    EXCHANGE_COMMISSION = 'ExchangeCommission'
-    SERVICE_COMMISSION = 'ServiceCommission'
-    MARGIN_COMMISSION = 'MarginCommission'
-    OTHER_COMMISSION = 'OtherCommission'
-    PAY_IN = 'PayIn'
-    PAY_OUT = 'PayOut'
-    TAX = 'Tax'
-    TAX_LUCRE = 'TaxLucre'
-    TAX_DIVIDEND = 'TaxDividend'
-    TAX_COUPON = 'TaxCoupon'
-    TAX_BACK = 'TaxBack'
-    REPAYMENT = 'Repayment'
-    PART_REPAYMENT = 'PartRepayment'
-    COUPON = 'Coupon'
-    DIVIDEND = 'Dividend'
-    SECURITY_IN = 'SecurityIn'
-    SECURITY_OUT = 'SecurityOut'
+    BUY = "Buy"
+    BUY_CARD = "BuyCard"
+    SELL = "Sell"
+    BROKER_COMMISSION = "BrokerCommission"
+    EXCHANGE_COMMISSION = "ExchangeCommission"
+    SERVICE_COMMISSION = "ServiceCommission"
+    MARGIN_COMMISSION = "MarginCommission"
+    OTHER_COMMISSION = "OtherCommission"
+    PAY_IN = "PayIn"
+    PAY_OUT = "PayOut"
+    TAX = "Tax"
+    TAX_LUCRE = "TaxLucre"
+    TAX_DIVIDEND = "TaxDividend"
+    TAX_COUPON = "TaxCoupon"
+    TAX_BACK = "TaxBack"
+    REPAYMENT = "Repayment"
+    PART_REPAYMENT = "PartRepayment"
+    COUPON = "Coupon"
+    DIVIDEND = "Dividend"
+    SECURITY_IN = "SecurityIn"
+    SECURITY_OUT = "SecurityOut"
 
 
 @dataclass
 class OperationTrade(BaseModel):
     tradeId: TradeID
-    date: datetime = field(metadata={'deserialize': 'ciso8601'})
+    date: datetime = field(metadata={"deserialize": "ciso8601"})
     price: float
     quantity: int
 
@@ -66,7 +65,7 @@ class Operation(BaseModel):
     currency: Currency
     payment: float
     isMarginCall: bool
-    date: datetime = field(metadata={'deserialize': 'ciso8601'})
+    date: datetime = field(metadata={"deserialize": "ciso8601"})
     trades: Optional[List[OperationTrade]] = None
     commission: Optional[MoneyAmount] = None
     price: Optional[float] = None
@@ -83,12 +82,12 @@ class Operations(BaseModel):
 
 
 __all__ = [
-    'OperationID',
-    'TradeID',
-    'OperationStatus',
-    'OperationType',
-    'OperationTypeWithCommission',
-    'OperationTrade',
-    'Operation',
-    'Operations',
+    "OperationID",
+    "TradeID",
+    "OperationStatus",
+    "OperationType",
+    "OperationTypeWithCommission",
+    "OperationTrade",
+    "Operation",
+    "Operations",
 ]

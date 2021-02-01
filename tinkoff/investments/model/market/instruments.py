@@ -1,12 +1,12 @@
 from dataclasses import dataclass
-from typing import Optional, List
+from typing import List, Optional
 
 from tinkoff.investments.model.base import (
     BaseModel,
     Currency,
     FigiName,
-    TickerName,
     InstrumentType,
+    TickerName,
 )
 
 
@@ -30,6 +30,6 @@ class MarketInstrumentList(BaseModel):
 
 
 __all__ = [
-    'MarketInstrument',
-    'MarketInstrumentList',
+    "MarketInstrument",
+    "MarketInstrumentList",
 ]

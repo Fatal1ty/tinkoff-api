@@ -2,8 +2,7 @@ from datetime import datetime, timezone
 
 
 def offset_aware_datetime(
-    dt: datetime,
-    tzinfo: timezone = timezone.utc
+    dt: datetime, tzinfo: timezone = timezone.utc
 ) -> datetime:
     if dt.tzinfo:
         return dt
@@ -11,6 +10,4 @@ def offset_aware_datetime(
         return dt.replace(tzinfo=tzinfo)
 
 
-__all__ = [
-    'offset_aware_datetime'
-]
+__all__ = ["offset_aware_datetime"]

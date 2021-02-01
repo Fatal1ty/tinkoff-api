@@ -52,34 +52,36 @@ Usage examples
 import asyncio
 from datetime import datetime
 from tinkoff.investments import (
-    TinkoffInvestmentsRESTClient, Environment,CandleResolution
+    TinkoffInvestmentsRESTClient,
+    Environment,
+    CandleResolution,
 )
 from tinkoff.investments.client.exceptions import TinkoffInvestmentsError
 
 async def show_apple_year_candles():
     try:
         async with TinkoffInvestmentsRESTClient(
-                token='TOKEN',
-                environment=Environment.SANDBOX) as client:
+            token="TOKEN", environment=Environment.SANDBOX
+        ) as client:
 
             candles = await client.market.candles.get(
-                figi='BBG000B9XRY4',
+                figi="BBG000B9XRY4",
                 dt_from=datetime(2019, 1, 1),
                 dt_to=datetime(2019, 12, 31),
-                interval=CandleResolution.DAY
+                interval=CandleResolution.DAY,
             )
             for candle in candles:
-                print(f'{candle.time}: {candle.h}')
+                print(f"{candle.time}: {candle.h}")
     except TinkoffInvestmentsError as e:
         print(e)
 
 async def jackpot():
     try:
         async with TinkoffInvestmentsRESTClient(
-                token='TOKEN',
-                environment=Environment.SANDBOX) as client:
+            token="TOKEN", environment=Environment.SANDBOX
+        ) as client:
 
-            instruments = await client.market.instruments.search('AAPL')
+            instruments = await client.market.instruments.search("AAPL")
             apple = instruments[0]
 
             account = await client.sandbox.accounts.register()
@@ -89,10 +91,10 @@ async def jackpot():
                 broker_account_id=account.brokerAccountId,
             )
 
-            print('We created the following portfolio:')
+            print("We created the following portfolio:")
             positions = await client.portfolio.get_positions()
             for position in positions:
-                print(f'{position.name}: {position.lots} lots')
+                print(f"{position.name}: {position.lots} lots")
     except TinkoffInvestmentsError as e:
         print(e)
 
@@ -104,13 +106,15 @@ asyncio.run(jackpot())
 import asyncio
 from datetime import datetime
 from tinkoff.investments import (
-    TinkoffInvestmentsStreamingClient, CandleEvent, CandleResolution
+    TinkoffInvestmentsStreamingClient,
+    CandleEvent,
+    CandleResolution,
 )
 
-client = TinkoffInvestmentsStreamingClient(token='TOKEN')
+client = TinkoffInvestmentsStreamingClient(token="TOKEN")
 
-@client.events.candles('BBG009S39JX6', CandleResolution.MIN_1)
-@client.events.candles('BBG000B9XRY4', CandleResolution.MIN_1)
+@client.events.candles("BBG009S39JX6", CandleResolution.MIN_1)
+@client.events.candles("BBG000B9XRY4", CandleResolution.MIN_1)
 async def on_candle(candle: CandleEvent, server_time: datetime):
     print(candle, server_time)
 
@@ -122,18 +126,20 @@ asyncio.run(client.run())
 import asyncio
 from datetime import datetime
 from tinkoff.investments import (
-    TinkoffInvestmentsStreamingClient, CandleEvent, CandleResolution
+    TinkoffInvestmentsStreamingClient,
+    CandleEvent,
+    CandleResolution,
 )
 
-client = TinkoffInvestmentsStreamingClient(token='TOKEN')
+client = TinkoffInvestmentsStreamingClient(token="TOKEN")
 
-@client.events.candles('BBG000B9XRY4', CandleResolution.HOUR)
+@client.events.candles("BBG000B9XRY4", CandleResolution.HOUR)
 async def on_candle(candle: CandleEvent, server_time: datetime):
     if candle.h > 1000:
         await client.events.candles.subscribe(
             callback=on_candle,
             figi=candle.figi,
-            interval=CandleResolution.MIN_1
+            interval=CandleResolution.MIN_1,
         )
     elif candle.h < 1000:
         await client.events.candles.unsubscribe(
@@ -148,25 +154,27 @@ asyncio.run(client.run())
 import asyncio
 from datetime import datetime
 from tinkoff.investments import (
-    TinkoffInvestmentsStreamingClient, TinkoffInvestmentsRESTClient,
-    CandleEvent, CandleResolution, OperationType
+    TinkoffInvestmentsStreamingClient,
+    TinkoffInvestmentsRESTClient,
+    CandleEvent,
+    CandleResolution,
+    OperationType,
 )
 
-streaming = TinkoffInvestmentsStreamingClient('TOKEN')
-rest = TinkoffInvestmentsRESTClient('TOKEN')
+streaming = TinkoffInvestmentsStreamingClient("TOKEN")
+rest = TinkoffInvestmentsRESTClient("TOKEN")
 
-@streaming.events.candles('BBG000B9XRY4', CandleResolution.MIN_1)
+@streaming.events.candles("BBG000B9XRY4", CandleResolution.MIN_1)
 async def buy_apple(candle: CandleEvent, server_time: datetime):
     if candle.c > 350:
         await rest.orders.create_market_order(
-            figi='BBG000B9XRY4',
+            figi="BBG000B9XRY4",
             lots=1,
             operation=OperationType.BUY,
             broker_account_id=123,
         )
 
 asyncio.run(streaming.run())
-
 ```
 
 #### Historical data:
@@ -174,18 +182,20 @@ asyncio.run(streaming.run())
 import asyncio
 from datetime import datetime
 from tinkoff.investments import (
-    CandleResolution, TinkoffInvestmentsRESTClient, Environment
+    CandleResolution,
+    TinkoffInvestmentsRESTClient,
+    Environment,
 )
 from tinkoff.investments.utils.historical_data import HistoricalData
 
 async def get_minute_candles():
     # show 1 minute candles for AAPL in 1 year period of time
     async with TinkoffInvestmentsRESTClient(
-        token='TOKEN', environment=Environment.SANDBOX
+        token="TOKEN", environment=Environment.SANDBOX
     ) as client:
         historical_data = HistoricalData(client)
         async for candle in historical_data.iter_candles(
-            figi='BBG000B9XRY4',
+            figi="BBG000B9XRY4",
             dt_from=datetime(2019, 1, 1),
             dt_to=datetime(2020, 1, 1),
             interval=CandleResolution.MIN_1,
@@ -193,6 +203,7 @@ async def get_minute_candles():
             print(candle)
 
 asyncio.run(get_minute_candles())
+
 ```
 
 TODO

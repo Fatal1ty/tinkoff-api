@@ -5,25 +5,24 @@ from typing import Optional
 from tinkoff.investments.model.base import BaseModel, FigiName, MoneyAmount
 from tinkoff.investments.model.operations import OperationType
 
-
 OrderID = str
 
 
 class OrderStatus(Enum):
-    NEW = 'New'
-    PARTIALLY_FILL = 'PartiallyFill'
-    FILL = 'Fill'
-    CANCELLED = 'Cancelled'
-    REPLACED = 'Replaced'
-    PENDING_CANCEL = 'PendingCancel'
-    REJECTED = 'Rejected'
-    PENDING_REPLACE = 'PendingReplace'
-    PENDING_NEW = 'PendingNew'
+    NEW = "New"
+    PARTIALLY_FILL = "PartiallyFill"
+    FILL = "Fill"
+    CANCELLED = "Cancelled"
+    REPLACED = "Replaced"
+    PENDING_CANCEL = "PendingCancel"
+    REJECTED = "Rejected"
+    PENDING_REPLACE = "PendingReplace"
+    PENDING_NEW = "PendingNew"
 
 
 class OrderType(Enum):
-    LIMIT = 'Limit'
-    MARKET = 'Market'
+    LIMIT = "Limit"
+    MARKET = "Market"
 
 
 @dataclass
@@ -76,12 +75,12 @@ class PlacedMarketOrder(BaseModel):
 
 
 __all__ = [
-    'OrderID',
-    'OrderStatus',
-    'OrderType',
-    'Order',
-    'LimitOrderRequest',
-    'PlacedLimitOrder',
-    'MarketOrderRequest',
-    'PlacedMarketOrder',
+    "OrderID",
+    "OrderStatus",
+    "OrderType",
+    "Order",
+    "LimitOrderRequest",
+    "PlacedLimitOrder",
+    "MarketOrderRequest",
+    "PlacedMarketOrder",
 ]

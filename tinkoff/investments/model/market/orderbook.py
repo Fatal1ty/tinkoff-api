@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from typing import List, Optional
 from enum import Enum
+from typing import List, Optional
 
 from tinkoff.investments.model.base import BaseModel, FigiName
 
 
 class TradingStatus(Enum):
-    NORMAL_TRADING = 'NormalTrading'
-    NOT_AVAILABLE_FOR_TRADING = 'NotAvailableForTrading'
+    NORMAL_TRADING = "NormalTrading"
+    NOT_AVAILABLE_FOR_TRADING = "NotAvailableForTrading"
 
 
 @dataclass
@@ -32,7 +32,7 @@ class OrderBook(BaseModel):
 
 
 __all__ = [
-    'TradingStatus',
-    'OrderBookEntity',
-    'OrderBook',
+    "TradingStatus",
+    "OrderBookEntity",
+    "OrderBook",
 ]

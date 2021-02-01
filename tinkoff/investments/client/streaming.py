@@ -1,25 +1,24 @@
 import asyncio
 import logging
 from datetime import datetime
-from typing import Any, Dict, Type, Optional, Callable, List
+from typing import Any, Callable, Dict, List, Optional, Type
 
-from aiohttp import ClientWebSocketResponse, WSMsgType, ClientError
+from aiohttp import ClientError, ClientWebSocketResponse, WSMsgType
 
 from tinkoff.base import BaseHTTPClient
 from tinkoff.investments.client.environments import Environment, EnvironmentURL
 from tinkoff.investments.model.streaming import (
     BaseEvent,
-    CandleEvent,
-    OrderBookEvent,
-    InstrumentInfoEvent,
-    ErrorEvent,
     BaseEventKey,
-    StreamingMessage,
+    CandleEvent,
+    ErrorEvent,
     EventName,
+    InstrumentInfoEvent,
+    OrderBookEvent,
+    StreamingMessage,
 )
 
-
-logger = logging.getLogger('streaming-api')
+logger = logging.getLogger("streaming-api")
 
 
 class BaseEventStream:
@@ -27,13 +26,17 @@ class BaseEventStream:
 
     def __init__(self):
         self._subscribers = {}  # type: Dict[BaseEventKey, Callable]
-        self._client = None  # type: Optional[TinkoffInvestmentsStreamingClient]
+        self._client = (
+            None
+        )  # type: Optional[TinkoffInvestmentsStreamingClient]
 
     def __call__(self, *args, **kwargs):
         def decorator(callback):
             self._subscribers[
-                self.EVENT_TYPE.key_type(*args, **kwargs)] = callback
+                self.EVENT_TYPE.key_type(*args, **kwargs)
+            ] = callback
             return callback
+
         return decorator
 
     async def subscribe(self, callback, *args, **kwargs):
@@ -82,7 +85,7 @@ class EventsBroker:
             EventName.ERROR: self.errors,
         }
 
-    def add_publisher(self, client: 'TinkoffInvestmentsStreamingClient'):
+    def add_publisher(self, client: "TinkoffInvestmentsStreamingClient"):
         self.candles._client = client
         self.orderbooks._client = client
         self.instrument_info._client = client
@@ -94,18 +97,16 @@ class EventsBroker:
 
 class TinkoffInvestmentsStreamingClient(BaseHTTPClient):
     def __init__(
-            self,
-            token: str,
-            events: EventsBroker = None,
-            receive_timeout: Optional[float] = 5,
-            heartbeat: Optional[float] = 3,
-            reconnect_timeout: float = 3,
+        self,
+        token: str,
+        events: EventsBroker = None,
+        receive_timeout: Optional[float] = 5,
+        heartbeat: Optional[float] = 3,
+        reconnect_timeout: float = 3,
     ):
         super().__init__(
             base_url=EnvironmentURL[Environment.STREAMING],
-            headers={
-                'authorization': f'Bearer {token}'
-            }
+            headers={"authorization": f"Bearer {token}"},
         )
         self.events = events or EventsBroker()
         self.events.add_publisher(self)
@@ -125,7 +126,7 @@ class TinkoffInvestmentsStreamingClient(BaseHTTPClient):
             try:
                 async with self._session.ws_connect(
                     url=self._base_url,
-                    timeout=0.,
+                    timeout=0.0,
                     receive_timeout=self._receive_timeout,
                     heartbeat=self._heartbeat,
                 ) as ws:
@@ -150,7 +151,7 @@ class TinkoffInvestmentsStreamingClient(BaseHTTPClient):
                     )
                 except Exception as e:
                     logger.exception(
-                        'Unhandled exception in streaming event handler: %s', e
+                        "Unhandled exception in streaming event handler: %s", e
                     )
 
     async def _subscribe_to_streams(self, ws: ClientWebSocketResponse):
@@ -159,19 +160,23 @@ class TinkoffInvestmentsStreamingClient(BaseHTTPClient):
 
     @property
     def _event_streams(self):
-        return (self.events.candles, self.events.orderbooks,
-                self.events.instrument_info)
+        return (
+            self.events.candles,
+            self.events.orderbooks,
+            self.events.instrument_info,
+        )
 
     def _subscription_keys(self) -> List[Dict[str, Any]]:
         keys = []
         for event_stream in self._event_streams:
             # noinspection PyProtectedMember
-            keys.extend([key.subscribe_key()
-                         for key in event_stream._subscribers.keys()])
+            keys.extend(
+                [
+                    key.subscribe_key()
+                    for key in event_stream._subscribers.keys()
+                ]
+            )
         return keys
 
 
-__all__ = [
-    'EventsBroker',
-    'TinkoffInvestmentsStreamingClient'
-]
+__all__ = ["EventsBroker", "TinkoffInvestmentsStreamingClient"]

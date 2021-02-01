@@ -4,10 +4,10 @@ from typing import List, Optional
 from tinkoff.investments.model.base import (
     BaseModel,
     Currency,
-    MoneyAmount,
     FigiName,
-    TickerName,
     InstrumentType,
+    MoneyAmount,
+    TickerName,
 )
 
 
@@ -44,9 +44,9 @@ class Currencies(BaseModel):
 
 
 __all__ = [
-    'InstrumentType',
-    'PortfolioPosition',
-    'CurrencyPosition',
-    'Portfolio',
-    'Currencies',
+    "InstrumentType",
+    "PortfolioPosition",
+    "CurrencyPosition",
+    "Portfolio",
+    "Currencies",
 ]

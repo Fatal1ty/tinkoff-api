@@ -13,7 +13,7 @@ class TinkoffInvestmentsUsageError(TinkoffInvestmentsError):
 
 class TinkoffInvestmentsUnauthorizedError(TinkoffInvestmentsError):
     def __str__(self):
-        return 'Have you missed the real token?'
+        return "Have you missed the real token?"
 
 
 class TinkoffInvestmentsTooManyRequestsError(TinkoffInvestmentsError):
@@ -39,16 +39,16 @@ class TinkoffInvestmentsAPIError(TinkoffInvestmentsError):
         self.error = error
 
     def __str__(self):
-        return f'{self.error.code}, {self.error.message}'
+        return f"{self.error.code}, {self.error.message}"
 
 
 __all__ = [
-    'TinkoffInvestmentsError',
-    'TinkoffInvestmentsUsageError',
-    'TinkoffInvestmentsAPIError',
-    'TinkoffInvestmentsUnauthorizedError',
-    'TinkoffInvestmentsTooManyRequestsError',
-    'TinkoffInvestmentsTimeoutError',
-    'TinkoffInvestmentsUnavailableError',
-    'TinkoffInvestmentsConnectionError',
+    "TinkoffInvestmentsError",
+    "TinkoffInvestmentsUsageError",
+    "TinkoffInvestmentsAPIError",
+    "TinkoffInvestmentsUnauthorizedError",
+    "TinkoffInvestmentsTooManyRequestsError",
+    "TinkoffInvestmentsTimeoutError",
+    "TinkoffInvestmentsUnavailableError",
+    "TinkoffInvestmentsConnectionError",
 ]

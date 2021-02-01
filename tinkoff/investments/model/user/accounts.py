@@ -1,16 +1,15 @@
-from typing import List
 from dataclasses import dataclass
 from enum import Enum
+from typing import List
 
 from tinkoff.investments.model.base import BaseModel
-
 
 BrokerAccountID = str
 
 
 class BrokerAccountType(Enum):
-    TINKOFF = 'Tinkoff'
-    TINKOFF_IIS = 'TinkoffIis'
+    TINKOFF = "Tinkoff"
+    TINKOFF_IIS = "TinkoffIis"
 
 
 @dataclass
@@ -25,8 +24,8 @@ class UserAccounts(BaseModel):
 
 
 __all__ = [
-    'BrokerAccountID',
-    'BrokerAccountType',
-    'UserAccount',
-    'UserAccounts',
+    "BrokerAccountID",
+    "BrokerAccountType",
+    "UserAccount",
+    "UserAccounts",
 ]

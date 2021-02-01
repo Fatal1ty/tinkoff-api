@@ -5,37 +5,35 @@ from aiohttp import ClientConnectionError
 
 from tinkoff.base import BaseHTTPClient, RateLimiter, RateLimitReached
 from tinkoff.investments.api import (
-    SandboxAPI,
-    OrdersAPI,
-    PortfolioAPI,
     MarketAPI,
     OperationsAPI,
+    OrdersAPI,
+    PortfolioAPI,
+    SandboxAPI,
     UserAPI,
 )
 from tinkoff.investments.client.environments import Environment, EnvironmentURL
 from tinkoff.investments.client.exceptions import (
-    TinkoffInvestmentsUnauthorizedError,
-    TinkoffInvestmentsTooManyRequestsError,
-    TinkoffInvestmentsTimeoutError,
-    TinkoffInvestmentsUnavailableError,
     TinkoffInvestmentsConnectionError,
+    TinkoffInvestmentsTimeoutError,
+    TinkoffInvestmentsTooManyRequestsError,
+    TinkoffInvestmentsUnauthorizedError,
+    TinkoffInvestmentsUnavailableError,
 )
 
 
 class TinkoffInvestmentsRESTClient(BaseHTTPClient):
     def __init__(
-            self,
-            token: str,
-            environment: Environment = Environment.PRODUCTION,
-            timeout: Optional[float] = 5,
-            wait_on_rate_limit: bool = True,
+        self,
+        token: str,
+        environment: Environment = Environment.PRODUCTION,
+        timeout: Optional[float] = 5,
+        wait_on_rate_limit: bool = True,
     ):
 
         super(TinkoffInvestmentsRESTClient, self).__init__(
             base_url=EnvironmentURL[environment],
-            headers={
-                'authorization': f'Bearer {token}'
-            },
+            headers={"authorization": f"Bearer {token}"},
             timeout=timeout,
         )
         self.sandbox = SandboxAPI(self)
@@ -52,9 +50,7 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
             if rate_limit:
                 await rate_limit.acquire(self.wait_on_rate_limit)
             response = await self._session.request(
-                method=method,
-                url=self._base_url / path.lstrip('/'),
-                **kwargs
+                method=method, url=self._base_url / path.lstrip("/"), **kwargs
             )
             if response.status == 401:
                 raise TinkoffInvestmentsUnauthorizedError
@@ -79,6 +75,4 @@ class TinkoffInvestmentsRESTClient(BaseHTTPClient):
         await self.close()
 
 
-__all__ = [
-    'TinkoffInvestmentsRESTClient'
-]
+__all__ = ["TinkoffInvestmentsRESTClient"]

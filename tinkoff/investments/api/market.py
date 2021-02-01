@@ -1,60 +1,59 @@
 from datetime import datetime
-from typing import Optional, List, Any
+from typing import Any, List, Optional
 
 from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
-
 from tinkoff.investments.client.exceptions import TinkoffInvestmentsAPIError
 from tinkoff.investments.model.base import FigiName, TickerName
-from tinkoff.investments.model.market.orderbook import OrderBook
 from tinkoff.investments.model.market.candles import (
     Candle,
-    Candles,
     CandleResolution,
+    Candles,
 )
 from tinkoff.investments.model.market.instruments import (
     MarketInstrument,
     MarketInstrumentList,
 )
+from tinkoff.investments.model.market.orderbook import OrderBook
 from tinkoff.investments.utils import offset_aware_datetime
 
 
 class MarketInstrumentsAPI(BaseTinkoffInvestmentsAPI):
     async def search(self, ticker: TickerName) -> List[MarketInstrument]:
         return await self.__get_instruments(
-            path='/market/search/by-ticker',
+            path="/market/search/by-ticker",
             ticker=ticker,
         )
 
     async def get(self, figi: FigiName) -> Optional[MarketInstrument]:
         try:
             payload = await self._request(
-                method='GET',
-                path='/market/search/by-figi',
-                params={'figi': figi},
+                method="GET",
+                path="/market/search/by-figi",
+                params={"figi": figi},
             )
             return MarketInstrument.from_dict(payload)
         except TinkoffInvestmentsAPIError as e:
-            if e.error.code == 'NOT_FOUND':
+            if e.error.code == "NOT_FOUND":
                 return None
             else:
                 raise e from None
 
     async def get_stocks(self) -> List[MarketInstrument]:
-        return await self.__get_instruments('/market/stocks')
+        return await self.__get_instruments("/market/stocks")
 
     async def get_bonds(self) -> List[MarketInstrument]:
-        return await self.__get_instruments('/market/bonds')
+        return await self.__get_instruments("/market/bonds")
 
     async def get_etfs(self) -> List[MarketInstrument]:
-        return await self.__get_instruments('/market/etfs')
+        return await self.__get_instruments("/market/etfs")
 
     async def get_currencies(self) -> List[MarketInstrument]:
-        return await self.__get_instruments('/market/currencies')
+        return await self.__get_instruments("/market/currencies")
 
     async def __get_instruments(self, path, **params):
         # type: (str, Any) -> List[MarketInstrument]
         payload = await self._request(
-            method='GET',
+            method="GET",
             path=path,
             params=params,
         )
@@ -64,12 +63,12 @@ class MarketInstrumentsAPI(BaseTinkoffInvestmentsAPI):
 class MarketOrderBooksAPI(BaseTinkoffInvestmentsAPI):
     async def get(self, figi: FigiName, depth: int) -> OrderBook:
         payload = await self._request(
-            method='GET',
-            path='/market/orderbook',
+            method="GET",
+            path="/market/orderbook",
             params={
-                'figi': figi,
-                'depth': depth,
-            }
+                "figi": figi,
+                "depth": depth,
+            },
         )
         return OrderBook.from_dict(payload)
 
@@ -80,13 +79,13 @@ class MarketCandlesAPI(BaseTinkoffInvestmentsAPI):
         dt_from = offset_aware_datetime(dt_from)
         dt_to = offset_aware_datetime(dt_to)
         payload = await self._request(
-            method='GET',
-            path='/market/candles',
+            method="GET",
+            path="/market/candles",
             params={
-                'figi': figi,
-                'from': dt_from.isoformat(),
-                'to': dt_to.isoformat(),
-                'interval': interval.value,
+                "figi": figi,
+                "from": dt_from.isoformat(),
+                "to": dt_to.isoformat(),
+                "interval": interval.value,
             },
         )
         return Candles.from_dict(payload).candles

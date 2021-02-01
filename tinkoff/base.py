@@ -1,7 +1,7 @@
-import time
 import asyncio
+import time
 from collections import deque
-from typing import Optional, Dict, Deque
+from typing import Deque, Dict, Optional
 
 import aiohttp
 from yarl import URL
@@ -22,7 +22,7 @@ class BaseHTTPClient:
         if not self.__session:
             self.__session = aiohttp.ClientSession(
                 headers=self.__headers,
-                timeout=aiohttp.ClientTimeout(total=self.__timeout)
+                timeout=aiohttp.ClientTimeout(total=self.__timeout),
             )
         return self.__session
 
@@ -82,8 +82,8 @@ class RateLimiter:
 
 
 __all__ = [
-    'BaseHTTPClient',
-    'classproperty',
-    'RateLimiter',
-    'RateLimitReached',
+    "BaseHTTPClient",
+    "classproperty",
+    "RateLimiter",
+    "RateLimitReached",
 ]

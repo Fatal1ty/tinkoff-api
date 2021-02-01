@@ -2,19 +2,21 @@ from datetime import datetime, timedelta
 from typing import AsyncIterator
 
 from tinkoff.investments import (
-    Candle, CandleResolution, FigiName, TinkoffInvestmentsRESTClient
+    Candle,
+    CandleResolution,
+    FigiName,
+    TinkoffInvestmentsRESTClient,
 )
-
 from tinkoff.investments.utils import offset_aware_datetime
 
 
 class HistoricalData:
     _TIMEDELTA = {
-        'MIN': timedelta(days=1),
-        'HOUR': timedelta(weeks=1),
-        'DAY': timedelta(days=365),
-        'WEEK': timedelta(days=728),
-        'MONTH': timedelta(days=365 * 10),
+        "MIN": timedelta(days=1),
+        "HOUR": timedelta(weeks=1),
+        "DAY": timedelta(days=365),
+        "WEEK": timedelta(days=728),
+        "MONTH": timedelta(days=365 * 10),
     }
 
     def __init__(self, client: TinkoffInvestmentsRESTClient):
@@ -25,7 +27,7 @@ class HistoricalData:
         figi: FigiName,
         dt_from: datetime,
         dt_to: datetime,
-        interval: CandleResolution
+        interval: CandleResolution,
     ) -> AsyncIterator[Candle]:
         dt_from = offset_aware_datetime(dt_from)
         dt_to = offset_aware_datetime(dt_to)
@@ -39,7 +41,7 @@ class HistoricalData:
                 figi=figi,
                 dt_from=dt_from_shifted,
                 dt_to=dt_from + timedelta(days=days_increment + delta.days),
-                interval=interval
+                interval=interval,
             ):
                 if candle.time > dt_to:
                     break
@@ -50,4 +52,4 @@ class HistoricalData:
         for key, value in self._TIMEDELTA.items():
             if interval.name.startswith(key):
                 return value
-        raise ValueError(f'Unknown interval {interval}')
+        raise ValueError(f"Unknown interval {interval}")

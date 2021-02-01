@@ -1,9 +1,9 @@
-from typing import Union, Dict, List, Any
+from typing import Any, Dict, List, Union
 
 from tinkoff.base import RateLimiter
+from tinkoff.investments.client.exceptions import TinkoffInvestmentsAPIError
 from tinkoff.investments.model.base import Error
 from tinkoff.investments.model.response import TinkoffInvestmentsAPIResponse
-from tinkoff.investments.client.exceptions import TinkoffInvestmentsAPIError
 
 
 class BaseTinkoffInvestmentsAPI:
@@ -31,12 +31,12 @@ class BaseTinkoffInvestmentsAPI:
                 tracking_id=response.trackingId,
                 status=response.status,
                 error=Error(
-                    message=response.payload.get('message'),
-                    code=response.payload.get('code'),
-                )
+                    message=response.payload.get("message"),
+                    code=response.payload.get("code"),
+                ),
             )
 
 
 __all__ = [
-    'BaseTinkoffInvestmentsAPI',
+    "BaseTinkoffInvestmentsAPI",
 ]

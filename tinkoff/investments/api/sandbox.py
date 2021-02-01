@@ -13,14 +13,18 @@ from tinkoff.investments.model.user.accounts import (
 
 
 class SandboxAccountCurrenciesAPI(BaseTinkoffInvestmentsAPI):
-    async def set_balance(self, broker_account_id, currency, balance):
-        # type: (BrokerAccountID, Currency, float) -> None
+    async def set_balance(self, currency, balance, broker_account_id=None):
+        # type: (Currency, float, BrokerAccountID) -> None
+        if broker_account_id is not None:
+            params = {
+                'brokerAccountId': broker_account_id
+            }
+        else:
+            params = {}
         await self._request(
             method='POST',
             path='/sandbox/currencies/balance',
-            params={
-                'brokerAccountId': broker_account_id
-            },
+            params=params,
             json=SandboxSetCurrencyBalanceRequest(
                 currency=currency,
                 balance=balance
@@ -29,14 +33,18 @@ class SandboxAccountCurrenciesAPI(BaseTinkoffInvestmentsAPI):
 
 
 class SandboxAccountPositionsAPI(BaseTinkoffInvestmentsAPI):
-    async def set_balance(self, broker_account_id, figi, balance):
-        # type: (BrokerAccountID, FigiName, float) -> None
+    async def set_balance(self, figi, balance, broker_account_id=None):
+        # type: (FigiName, float, BrokerAccountID) -> None
+        if broker_account_id is not None:
+            params = {
+                'brokerAccountId': broker_account_id
+            }
+        else:
+            params = {}
         await self._request(
             method='POST',
             path='/sandbox/positions/balance',
-            params={
-                'brokerAccountId': broker_account_id
-            },
+            params=params,
             json=SandboxSetPositionBalanceRequest(
                 figi=figi,
                 balance=balance
@@ -61,22 +69,26 @@ class SandboxAccountsAPI(BaseTinkoffInvestmentsAPI):
         )
         return SandboxAccount.from_dict(payload)
 
-    async def remove(self, broker_account_id: BrokerAccountID):
+    async def remove(self, broker_account_id: BrokerAccountID = None):
+        if broker_account_id is not None:
+            params = {'brokerAccountId': broker_account_id}
+        else:
+            params = {}
         await self._request(
             method='POST',
             path='/sandbox/remove',
-            params={
-                'brokerAccountId': broker_account_id
-            }
+            params=params,
         )
 
-    async def clear(self, broker_account_id: BrokerAccountID):
+    async def clear(self, broker_account_id: BrokerAccountID = None):
+        if broker_account_id is not None:
+            params = {'brokerAccountId': broker_account_id}
+        else:
+            params = {}
         await self._request(
             method='POST',
             path='/sandbox/clear',
-            params={
-                'brokerAccountId': broker_account_id
-            }
+            params=params,
         )
 
 

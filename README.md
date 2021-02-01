@@ -84,9 +84,9 @@ async def jackpot():
 
             account = await client.sandbox.accounts.register()
             await client.sandbox.accounts.positions.set_balance(
-                broker_account_id=account.brokerAccountId,
                 figi=apple.figi,
                 balance=100,
+                broker_account_id=account.brokerAccountId,
             )
 
             print('We created the following portfolio:')

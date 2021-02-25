@@ -134,7 +134,7 @@ class TinkoffInvestmentsStreamingClient(BaseHTTPClient):
                     await self._run(ws)
             except asyncio.TimeoutError:
                 await asyncio.sleep(self._reconnect_timeout)
-            except ClientError:
+            except (ClientError, ConnectionResetError):
                 await asyncio.sleep(self._reconnect_timeout)
 
     async def _run(self, ws: ClientWebSocketResponse):

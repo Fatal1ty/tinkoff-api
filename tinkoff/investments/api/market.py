@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Any, List, Optional
 
+from tinkoff.base import RateLimiter
 from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
 from tinkoff.investments.client.exceptions import TinkoffInvestmentsAPIError
 from tinkoff.investments.model.base import FigiName, TickerName
@@ -18,6 +19,9 @@ from tinkoff.investments.utils import offset_aware_datetime
 
 
 class MarketInstrumentsAPI(BaseTinkoffInvestmentsAPI):
+    def _get_default_rate_limiter(self) -> RateLimiter:
+        return RateLimiter(rate=240, period=60)
+
     async def search(self, ticker: TickerName) -> List[MarketInstrument]:
         return await self.__get_instruments(
             path="/market/search/by-ticker",

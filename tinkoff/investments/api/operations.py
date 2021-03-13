@@ -33,4 +33,4 @@ class OperationsAPI(BaseTinkoffInvestmentsAPI):
             path="/operations",
             params=params,
         )
-        return Operations.from_dict(payload).operations
+        return Operations.from_dict(payload).operations  # type: ignore

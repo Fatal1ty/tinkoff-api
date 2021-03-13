@@ -61,7 +61,7 @@ class SandboxAccountsAPI(BaseTinkoffInvestmentsAPI):
                 brokerAccountType=broker_account_type
             ).to_dict(),
         )
-        return SandboxAccount.from_dict(payload)
+        return SandboxAccount.from_dict(payload)  # type: ignore
 
     async def remove(self, broker_account_id: BrokerAccountID = None):
         if broker_account_id is not None:

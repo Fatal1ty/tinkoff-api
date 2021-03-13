@@ -22,7 +22,7 @@ class PortfolioAPI(BaseTinkoffInvestmentsAPI):
             path="/portfolio",
             params=params,
         )
-        return Portfolio.from_dict(payload).positions
+        return Portfolio.from_dict(payload).positions  # type: ignore
 
     async def get_currencies(self, broker_account_id=None):
         # type: (BrokerAccountID) -> List[CurrencyPosition]
@@ -35,4 +35,4 @@ class PortfolioAPI(BaseTinkoffInvestmentsAPI):
             path="/portfolio/currencies",
             params=params,
         )
-        return Currencies.from_dict(payload).currencies
+        return Currencies.from_dict(payload).currencies  # type: ignore

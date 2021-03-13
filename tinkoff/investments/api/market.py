@@ -35,7 +35,7 @@ class MarketInstrumentsAPI(BaseTinkoffInvestmentsAPI):
                 path="/market/search/by-figi",
                 params={"figi": figi},
             )
-            return MarketInstrument.from_dict(payload)
+            return MarketInstrument.from_dict(payload)  # type: ignore
         except TinkoffInvestmentsAPIError as e:
             if e.error.code == "NOT_FOUND":
                 return None
@@ -61,7 +61,7 @@ class MarketInstrumentsAPI(BaseTinkoffInvestmentsAPI):
             path=path,
             params=params,
         )
-        return MarketInstrumentList.from_dict(payload).instruments
+        return MarketInstrumentList.from_dict(payload).instruments  # type: ignore
 
 
 class MarketOrderBooksAPI(BaseTinkoffInvestmentsAPI):
@@ -74,7 +74,7 @@ class MarketOrderBooksAPI(BaseTinkoffInvestmentsAPI):
                 "depth": depth,
             },
         )
-        return OrderBook.from_dict(payload)
+        return OrderBook.from_dict(payload)  # type: ignore
 
 
 class MarketCandlesAPI(BaseTinkoffInvestmentsAPI):
@@ -92,7 +92,7 @@ class MarketCandlesAPI(BaseTinkoffInvestmentsAPI):
                 "interval": interval.value,
             },
         )
-        return Candles.from_dict(payload).candles
+        return Candles.from_dict(payload).candles  # type: ignore
 
 
 class MarketAPI(BaseTinkoffInvestmentsAPI):

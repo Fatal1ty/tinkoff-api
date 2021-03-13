@@ -63,7 +63,7 @@ class OrdersAPI(BaseTinkoffInvestmentsAPI):
                 price=price,
             ).to_dict(),
         )
-        return PlacedLimitOrder.from_dict(payload)
+        return PlacedLimitOrder.from_dict(payload)  # type: ignore
 
     async def create_market_order(
         self,
@@ -86,7 +86,7 @@ class OrdersAPI(BaseTinkoffInvestmentsAPI):
                 operation=operation,
             ).to_dict(),
         )
-        return PlacedMarketOrder.from_dict(payload)
+        return PlacedMarketOrder.from_dict(payload)  # type: ignore
 
     async def cancel(self, order_id, broker_account_id=None):
         # type: (OrderID, BrokerAccountID) -> None

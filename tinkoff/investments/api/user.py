@@ -10,4 +10,4 @@ class UserAPI(BaseTinkoffInvestmentsAPI):
             method="GET",
             path="/user/accounts",
         )
-        return UserAccounts.from_dict(payload).accounts
+        return UserAccounts.from_dict(payload).accounts  # type: ignore

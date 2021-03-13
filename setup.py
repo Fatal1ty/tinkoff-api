@@ -30,7 +30,7 @@ setup(
     install_requires=[
         "aiohttp>=3.6.2,<4",
         "yarl>=1.4.2",
-        "mashumaro>=1.18,<2.0",
+        "mashumaro>=1.18",
         "ciso8601==2.1.2",
     ],
 )

@@ -61,7 +61,9 @@ class MarketInstrumentsAPI(BaseTinkoffInvestmentsAPI):
             path=path,
             params=params,
         )
-        return MarketInstrumentList.from_dict(payload).instruments  # type: ignore
+        return MarketInstrumentList.from_dict(
+            payload  # type: ignore
+        ).instruments
 
 
 class MarketOrderBooksAPI(BaseTinkoffInvestmentsAPI):

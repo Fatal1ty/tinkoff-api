@@ -33,7 +33,7 @@ class HistoricalData:
         dt_to = offset_aware_datetime(dt_to)
         days = (dt_to - dt_from).days
         delta = self._get_timedelta(interval)
-        for days_increment in range(0, days, delta.days):
+        for days_increment in range(0, days + 1, delta.days):
             dt_from_shifted = dt_from + timedelta(days=days_increment)
             if dt_from_shifted > offset_aware_datetime(datetime.utcnow()):
                 break

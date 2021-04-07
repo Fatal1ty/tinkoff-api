@@ -26,7 +26,7 @@ class Status(Enum):
 class Currency(Enum):
     RUB = "RUB"
     USD = "USD"
-    EUS = "EUR"
+    EUR = "EUR"
     GBP = "GBP"
     HKD = "HKD"
     CHF = "CHF"

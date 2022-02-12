@@ -3,7 +3,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar
 
-from mashumaro import DataClassJSONMixin
+from mashumaro.mixins.json import DataClassJSONMixin
 
 from tinkoff.base import classproperty
 from tinkoff.investments.model.base import BaseModel, FigiName

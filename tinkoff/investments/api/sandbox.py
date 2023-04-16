@@ -1,3 +1,5 @@
+from typing import Optional
+
 from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
 from tinkoff.investments.model.base import Currency, FigiName
 from tinkoff.investments.model.sandbox import (
@@ -14,7 +16,7 @@ from tinkoff.investments.model.user.accounts import (
 
 class SandboxAccountCurrenciesAPI(BaseTinkoffInvestmentsAPI):
     async def set_balance(self, currency, balance, broker_account_id=None):
-        # type: (Currency, float, BrokerAccountID) -> None
+        # type: (Currency, float, Optional[BrokerAccountID]) -> None
         if broker_account_id is not None:
             params = {"brokerAccountId": broker_account_id}
         else:
@@ -31,7 +33,7 @@ class SandboxAccountCurrenciesAPI(BaseTinkoffInvestmentsAPI):
 
 class SandboxAccountPositionsAPI(BaseTinkoffInvestmentsAPI):
     async def set_balance(self, figi, balance, broker_account_id=None):
-        # type: (FigiName, float, BrokerAccountID) -> None
+        # type: (FigiName, float, Optional[BrokerAccountID]) -> None
         if broker_account_id is not None:
             params = {"brokerAccountId": broker_account_id}
         else:
@@ -63,7 +65,9 @@ class SandboxAccountsAPI(BaseTinkoffInvestmentsAPI):
         )
         return SandboxAccount.from_dict(payload)  # type: ignore
 
-    async def remove(self, broker_account_id: BrokerAccountID = None):
+    async def remove(
+        self, broker_account_id: Optional[BrokerAccountID] = None
+    ):
         if broker_account_id is not None:
             params = {"brokerAccountId": broker_account_id}
         else:
@@ -74,7 +78,7 @@ class SandboxAccountsAPI(BaseTinkoffInvestmentsAPI):
             params=params,
         )
 
-    async def clear(self, broker_account_id: BrokerAccountID = None):
+    async def clear(self, broker_account_id: Optional[BrokerAccountID] = None):
         if broker_account_id is not None:
             params = {"brokerAccountId": broker_account_id}
         else:

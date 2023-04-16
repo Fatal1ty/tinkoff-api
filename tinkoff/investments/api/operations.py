@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
 from tinkoff.investments.model.base import FigiName
@@ -13,8 +13,8 @@ class OperationsAPI(BaseTinkoffInvestmentsAPI):
         self,
         dt_from: datetime,
         dt_to: datetime,
-        figi: FigiName = None,
-        broker_account_id: BrokerAccountID = None,
+        figi: Optional[FigiName] = None,
+        broker_account_id: Optional[BrokerAccountID] = None,
     ) -> List[Operation]:
 
         dt_from = offset_aware_datetime(dt_from)

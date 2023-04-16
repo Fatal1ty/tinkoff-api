@@ -99,7 +99,7 @@ class TinkoffInvestmentsStreamingClient(BaseHTTPClient):
     def __init__(
         self,
         token: str,
-        events: EventsBroker = None,
+        events: Optional[EventsBroker] = None,
         receive_timeout: Optional[float] = 5,
         heartbeat: Optional[float] = 3,
         reconnect_timeout: float = 3,

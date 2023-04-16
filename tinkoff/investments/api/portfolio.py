@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
 from tinkoff.investments.model.portfolio import (
@@ -12,7 +12,7 @@ from tinkoff.investments.model.user.accounts import BrokerAccountID
 
 class PortfolioAPI(BaseTinkoffInvestmentsAPI):
     async def get_positions(self, broker_account_id=None):
-        # type: (BrokerAccountID) -> List[PortfolioPosition]
+        # type: (Optional[BrokerAccountID]) -> List[PortfolioPosition]
         if broker_account_id is not None:
             params = {"brokerAccountId": broker_account_id}
         else:
@@ -25,7 +25,7 @@ class PortfolioAPI(BaseTinkoffInvestmentsAPI):
         return Portfolio.from_dict(payload).positions  # type: ignore
 
     async def get_currencies(self, broker_account_id=None):
-        # type: (BrokerAccountID) -> List[CurrencyPosition]
+        # type: (Optional[BrokerAccountID]) -> List[CurrencyPosition]
         if broker_account_id is not None:
             params = {"brokerAccountId": broker_account_id}
         else:

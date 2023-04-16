@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from tinkoff.base import RateLimiter
 from tinkoff.investments.api.base import BaseTinkoffInvestmentsAPI
@@ -28,7 +28,7 @@ class OrdersAPI(BaseTinkoffInvestmentsAPI):
         }
 
     async def get(self, broker_account_id=None):
-        # type: (BrokerAccountID) -> List[Order]
+        # type: (Optional[BrokerAccountID]) -> List[Order]
 
         if broker_account_id is not None:
             params = {"brokerAccountId": broker_account_id}
@@ -46,7 +46,7 @@ class OrdersAPI(BaseTinkoffInvestmentsAPI):
         lots: int,
         operation: OperationType,
         price: float,
-        broker_account_id: BrokerAccountID = None,
+        broker_account_id: Optional[BrokerAccountID] = None,
     ) -> PlacedLimitOrder:
 
         params = {"figi": figi}
@@ -70,7 +70,7 @@ class OrdersAPI(BaseTinkoffInvestmentsAPI):
         figi: FigiName,
         lots: int,
         operation: OperationType,
-        broker_account_id: BrokerAccountID = None,
+        broker_account_id: Optional[BrokerAccountID] = None,
     ) -> PlacedMarketOrder:
 
         params = {"figi": figi}
@@ -89,7 +89,7 @@ class OrdersAPI(BaseTinkoffInvestmentsAPI):
         return PlacedMarketOrder.from_dict(payload)  # type: ignore
 
     async def cancel(self, order_id, broker_account_id=None):
-        # type: (OrderID, BrokerAccountID) -> None
+        # type: (OrderID, Optional[BrokerAccountID]) -> None
 
         params = {"orderId": order_id}
         if broker_account_id is not None:
